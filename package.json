@@ -1,0 +1,14 @@
+{
+  "name": "aaarena-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static AA-Arena research website",
+  "scripts": {
+    "test": "node tests/browser-check.cjs && node tests/browser-check-abstract.cjs && node tests/browser-check-motion.cjs",
+    "export:motion": "node tools/export-motion.cjs",
+    "export:ablations": "node tools/export-ablations.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}

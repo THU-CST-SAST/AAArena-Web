@@ -1,0 +1,96 @@
+const {chromium, browserOptions, defaultTarget}=require('./browser-env.cjs');
+const assert=require('node:assert/strict');
+const fs=require('node:fs/promises');
+const target=process.env.ARENA_TEST_URL||defaultTarget;
+(async()=>{
+ const browser=await chromium.launch(browserOptions);
+ try {
+ const page=await browser.newPage({viewport:{width:1440,height:1000},acceptDownloads:true});
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const nav=()=>page.getByRole('navigation',{name:'Main navigation'});
+ const go=async name=>{await nav().getByRole('link',{name,exact:true}).click();await page.waitForFunction(n=>document.querySelector('[data-page="'+n.toLowerCase()+'"]').getAttribute('aria-current')==='page'&&(n==='Home'?document.querySelector('.home-title'):document.querySelector('h1')?.textContent===n),name);};
+ const detail=async name=>{await page.getByRole('navigation',{name:'Game details'}).getByRole('link',{name,exact:true}).click();await page.waitForFunction(n=>document.querySelector('.detail-tabs [aria-current="page"]')?.textContent===n,name);};
+ const shot=async name=>page.screenshot({path:`/tmp/aa-v2-${name}.png`});
+ const noOverflow=async()=>assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'page should not overflow horizontally');
+ await page.goto(target);
+ await page.getByRole('heading',{name:'Abstract',exact:true}).waitFor();
+ assert.deepEqual(await nav().getByRole('link').allTextContents(),['Home','Leaderboard','Games','Contact']);
+ await shot('home');
+ await page.getByRole('button',{name:'Main results',exact:true}).click();
+ assert.equal(await page.locator('.matrix tbody tr').count(),12);
+ await page.getByRole('button',{name:'Elo',exact:true}).click();
+ assert.ok((await page.locator('.matrix tbody tr').first().innerText()).includes('2281.6'));
+ await page.getByRole('button',{name:'Ablations',exact:true}).click();
+ assert.equal(await page.locator('.ablation-table tbody tr').count(),3);
+ await page.getByRole('button',{name:'Opponents',exact:true}).click();
+ await page.getByText('Exact values',{exact:true}).click();
+ assert.ok((await page.locator('.ablation-table').innerText()).includes('2127.5'));
+ await page.getByRole('button',{name:'Batch size',exact:true}).click();
+ await page.getByText('Exact values',{exact:true}).click();
+ assert.ok((await page.locator('.ablation-table').innerText()).includes('2703.9'));
+ await shot('ablations');
+ await page.getByRole('button',{name:'Case study',exact:true}).click();
+ await page.getByRole('button',{name:'Evaluation 1',exact:true}).click();
+ assert.ok((await page.locator('.analysis-stat').innerText()).includes('1760.2'));
+ await page.getByRole('button',{name:'Next milestone'}).click();
+ assert.ok((await page.locator('.analysis-stat').innerText()).includes('1782.0'));
+ await page.getByRole('button',{name:'More budget',exact:true}).click();
+ await page.getByRole('button',{name:'384 / 48',exact:true}).click();
+ assert.ok((await page.locator('#home-pane').innerText()).includes('2117.0'));
+ await go('Leaderboard');
+ assert.equal(await page.locator('.leaderboard-matrix tbody tr').count(),12);
+ assert.deepEqual(await page.locator('.leaderboard-matrix thead th').allTextContents(),['Game','GLM-5.3','Kimi K3','Qwen 3.8','DeepSeek V4 Pro','LongCat 2.0']);
+ assert.deepEqual(await page.locator('.leaderboard-matrix tfoot td').allTextContents(),['4 / 12','2 / 12','3 / 12','2 / 12','1 / 12']);
+ assert.equal(await page.getByRole('button',{name:'Overview',exact:true}).count(),0);
+ await shot('leaderboard');
+ const downloadEvent=page.waitForEvent('download');await page.getByRole('button',{name:'Export CSV'}).click();
+ const csv=await fs.readFile(await (await downloadEvent).path(),'utf8');assert.equal(csv.split('\r\n').length,61);
+ assert.equal(await page.locator('.leaderboard-matrix .pool-result-rank').count(),60);
+ assert.equal(await page.locator('.leaderboard-matrix .pool-result-elo').count(),60);
+ await page.getByLabel('Game',{exact:true}).selectOption('rollman');
+ assert.equal(await page.locator('.detail-table tbody tr').first().locator('.model-name').innerText(),'DeepSeek V4 Pro');
+ assert.deepEqual(await page.locator('.detail-table thead th').allTextContents(),['Model','Human-pool rank','Elo ↓']);
+ assert.deepEqual(await page.locator('.detail-table .pool-result-rank').allTextContents(),['#1','#1','#1','#1','#1']);
+ assert.deepEqual(await page.locator('.detail-table tbody tr td:last-child').allTextContents(),['807.7','636.9','636.9','581.2','534.2']);
+ await page.getByRole('link',{name:'Game details'}).click();
+ await page.getByRole('heading',{name:'Rollman',exact:true}).waitFor();
+ await go('Games');
+ assert.equal(await page.locator('.game-card').count(),12);
+ await shot('games');
+ await page.getByRole('button',{name:'Tactics',exact:true}).click();assert.equal(await page.locator('.game-card').count(),3);
+ await page.getByRole('button',{name:'All games',exact:true}).click();
+ await page.getByLabel('Sort by').selectOption('pool');assert.equal(await page.locator('.game-card h2').first().innerText(),'Dorado');
+ await page.getByRole('searchbox',{name:'Search games'}).fill('not-a-game');await page.getByRole('heading',{name:'No matching games'}).waitFor();
+ await page.getByRole('button',{name:'Clear filters'}).click();
+ await page.getByRole('link',{name:'Dorado details',exact:true}).click();
+ await shot('dorado');
+ await detail('Overview');
+ await page.getByRole('heading',{name:'How it plays'}).waitFor();await shot('dorado-overview');
+ await detail('Records');
+ assert.equal(await page.locator('.record-table tbody tr').count(),9);await shot('dorado-records');
+ await page.reload();assert.equal(await page.locator('.record-table tbody tr').count(),9);
+ await page.goBack();await page.getByRole('heading',{name:'How it plays'}).waitFor();
+ for(const name of ['Pacman','SnakeGo','Rollman','MoneCraft','AntWar','LostSpace','AquaWar','Generals','Dorado','Miracle','LOTA','AntWar2']){
+  await go('Games');await page.getByRole('link',{name:name+' details',exact:true}).click();await page.getByRole('heading',{name,exact:true}).waitFor();
+  assert.equal(await page.locator('.detail-table tbody tr').count(),5);
+  await detail('Overview');await page.getByRole('heading',{name:'How it plays'}).waitFor();
+  await detail('Records');await page.getByRole('heading',{name:'Main-stage records'}).waitFor();
+ }
+ await go('Contact');await shot('contact');
+ assert.equal(await page.locator('a[href^="mailto:"]').count(),4);
+ const [pdf]=await Promise.all([page.waitForEvent('popup'),page.getByRole('link',{name:'Paper',exact:true}).click()]);await pdf.waitForLoadState('domcontentloaded');assert.ok(pdf.url().includes('/assets/aa-arena.pdf'));await pdf.close();
+ for(const width of [390,320]){
+  await page.setViewportSize({width,height:844});
+  for(const name of ['Home','Leaderboard','Games','Contact']){await go(name);await noOverflow();await shot(`mobile-${width}-${name.toLowerCase()}`);}
+  await go('Home');for(const name of ['Abstract','Main results','Ablations','Case study','More budget']){await page.getByRole('button',{name,exact:true}).click();await noOverflow();}await page.getByRole('button',{name:'Ablations',exact:true}).click();await shot(`mobile-${width}-ablations`);
+  await go('Games');await page.getByRole('link',{name:'AntWar2 details',exact:true}).click();await page.getByRole('heading',{name:'AntWar2',exact:true}).waitFor();await noOverflow();await shot(`mobile-${width}-detail`);
+  assert.ok(await page.locator('.pool-leaderboard th').evaluateAll(headers=>headers.every(h=>getComputedStyle(h).display!=='none'&&h.getBoundingClientRect().width>0)),'all single-game columns should remain visible on mobile');
+  await detail('Overview');await noOverflow();
+  await detail('Records');await noOverflow();
+ }
+ await go('Games');await page.getByRole('link',{name:'Pacman details',exact:true}).focus();await page.keyboard.press('Enter');await page.getByRole('heading',{name:'Pacman',exact:true}).waitFor();
+ await page.goto(target+'#/games/missing');await page.getByRole('heading',{name:'Game not found'}).waitFor();await page.getByRole('link',{name:'Browse all games'}).click();await page.getByRole('heading',{name:'Games',exact:true}).waitFor();assert.equal(await page.locator('.game-card').count(),12);
+ assert.deepEqual(errors,[]);
+ console.log(JSON.stringify({result:'PASS',target,viewports:['1440x1000','390x844','320x844'],tabs:4,games:12,detailViews:36,csvResults:60,checks:['home research panels','model and game rankings','tie handling','CSV export','search and filters','deep links and refresh','browser back','keyboard navigation','PDF','no horizontal page overflow'],errors},null,2));
+ }finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exit(1)});
