@@ -82,8 +82,8 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
   await detail('Records');await page.getByRole('heading',{name:'Main-stage records'}).waitFor();
  }
  await go('Contact');await shot('contact');
- assert.equal(await page.locator('a[href^="mailto:"]').count(),3);
- await page.getByRole('heading',{name:'Hongning Wang · 王宏宁'}).waitFor();
+ assert.equal(await page.locator('a[href^="mailto:"]').count(),2);
+ await page.getByRole('heading',{name:'Kaisen Yang'}).waitFor();
  const [pdf]=await Promise.all([page.waitForEvent('popup'),page.getByRole('link',{name:'Paper',exact:true}).click()]);await pdf.waitForLoadState('domcontentloaded');assert.ok(pdf.url().includes('/assets/aa-arena.pdf'));await pdf.close();
  for(const width of [390,320]){
   await page.setViewportSize({width,height:844});

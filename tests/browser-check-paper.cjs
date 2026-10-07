@@ -56,10 +56,10 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
   await p.getByRole('navigation',{name:'Game details'}).getByRole('link',{name:'Overview',exact:true}).click();
   assert.match(await p.getByRole('link',{name:'Read the full game description'}).getAttribute('href'),/#page=22$/);
   await nav.getByRole('link',{name:'Contact',exact:true}).click();
-  await p.getByRole('heading',{name:'Corresponding author',exact:true}).waitFor();
-  await p.getByRole('link',{name:'hw-ai@tsinghua.edu.cn',exact:true}).waitFor();
-  assert.match(await p.locator('.author-list').innerText(),/Tianwei Luo/);
+  await p.getByRole('heading',{name:'Project leads',exact:true}).waitFor();
+  await p.getByRole('link',{name:'yks23@mails.tsinghua.edu.cn',exact:true}).waitFor();
+  await p.getByRole('link',{name:'lql24@mails.tsinghua.edu.cn',exact:true}).waitFor();
   assert.deepEqual(errors,[]);
-  console.log('PASS: online-visible 84 paper cells, new research panels, expanded mobile tables, six ablation downloads, PDF page links and updated authors.');
+  console.log('PASS: online-visible 84 paper cells, new research panels, expanded mobile tables, six ablation downloads, PDF page links and project contacts.');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

@@ -15,7 +15,7 @@ service, AgentBench, AHL-Arena, an API, or a database.
 - Leaderboard: twelve games × seven models, with human-pool rank and Elo; individual
   game tables and CSV export.
 - Games: twelve games, each with a leaderboard, overview, and measured records.
-- Contact: SAST, corresponding authors, project leads, and author list.
+- Contact: SAST and project leads in one compact contact section.
 
 ## Local preview
 
