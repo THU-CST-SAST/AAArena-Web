@@ -7,4 +7,3 @@ playwright-report/
 *.key
 .DS_Store
 deploy/
-

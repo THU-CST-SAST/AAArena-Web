@@ -41,7 +41,7 @@ are not necessary for this deployment. No password service is included in this r
 
 ## Tests
 
-Node.js and Playwright are needed only for development checks:
+Node.js 20 or newer and Playwright are needed only for development checks:
 
 ```sh
 npm ci
