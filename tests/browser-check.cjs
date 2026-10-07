@@ -29,15 +29,6 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
  await page.getByText('Exact values',{exact:true}).click();
  assert.ok((await page.locator('.ablation-table').innerText()).includes('2703.9'));
  await shot('ablations');
- await page.getByRole('button',{name:'Case study',exact:true}).click();
- await page.getByRole('button',{name:'Evaluation 1',exact:true}).click();
- assert.ok((await page.locator('.analysis-stat').innerText()).includes('1760.2'));
- await page.getByRole('button',{name:'Next milestone'}).click();
- assert.ok((await page.locator('.analysis-stat').innerText()).includes('1782.0'));
- await page.getByRole('button',{name:'More budget',exact:true}).click();
- await page.getByRole('button',{name:'384 / 48',exact:true}).click();
- assert.ok((await page.locator('#home-pane').innerText()).includes('2117.0'));
-
  await page.getByRole('button',{name:'Replay learning',exact:true}).click();
  await page.getByRole('heading',{name:'Learning from other players'}).waitFor();
  assert.equal(await page.locator('.replay-comparison .ablation-comparison').count(),3);
@@ -97,7 +88,7 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
  for(const width of [390,320]){
   await page.setViewportSize({width,height:844});
   for(const name of ['Home','Leaderboard','Games','Contact']){await go(name);await noOverflow();await shot(`mobile-${width}-${name.toLowerCase()}`);}
-  await go('Home');for(const name of ['Abstract','Main results','Ablations','Case study','More budget','Replay learning','Tokens & policies']){await page.getByRole('button',{name,exact:true}).click();await noOverflow();}await page.getByRole('button',{name:'Ablations',exact:true}).click();await shot(`mobile-${width}-ablations`);
+  await go('Home');for(const name of ['Abstract','Main results','Ablations','Replay learning','Tokens & policies']){await page.getByRole('button',{name,exact:true}).click();await noOverflow();}await page.getByRole('button',{name:'Ablations',exact:true}).click();await shot(`mobile-${width}-ablations`);
   await go('Games');await page.getByRole('link',{name:'AntWar2 details',exact:true}).click();await page.getByRole('heading',{name:'AntWar2',exact:true}).waitFor();await noOverflow();await shot(`mobile-${width}-detail`);
   assert.ok(await page.locator('.pool-leaderboard th').evaluateAll(headers=>headers.every(h=>getComputedStyle(h).display!=='none'&&h.getBoundingClientRect().width>0)),'all single-game columns should remain visible on mobile');
   await detail('Overview');await noOverflow();

@@ -10,8 +10,8 @@ service, AgentBench, AHL-Arena, an API, or a database.
 
 ## Pages
 
-- Home: visual abstract, main results, animated ablation comparisons, Dorado case
-  study, extended-budget results, on/off-policy replay learning, tokens and algorithm families.
+- Home: visual abstract, main results, animated ablation comparisons,
+  on/off-policy replay learning, tokens and algorithm families.
 - Leaderboard: twelve games × seven models, with human-pool rank and Elo; individual
   game tables and CSV export.
 - Games: twelve games, each with a leaderboard, overview, and measured records.
