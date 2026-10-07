@@ -15,7 +15,7 @@
     };
     const line=(x1,y1,x2,y2,color='#363636',width=2)=>{c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();};
     const box=(x,y,w,h,color)=>{c.fillStyle=color;c.fillRect(x,y,w,h);};
-    text('AA–Arena',52,65,28,WHITE,600);
+    text('AAArena',52,65,28,WHITE,600);
     text(kind==='dorado'?'Dorado / GLM-5.3':'Policy iteration',1148,65,23,GREY,400,'right');
     line(52,94,1148,94);
     if(kind==='loop') {

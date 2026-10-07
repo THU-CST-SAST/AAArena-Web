@@ -15,7 +15,7 @@ const fs=require('node:fs/promises');
   for(const [kind,label] of [['feedback','Replay feedback'],['opponents','Opponents'],['batch','Batch size']]){
    await page.getByRole('button',{name:label,exact:true}).click();
    await page.evaluate(()=>{
-    const title=document.querySelector('.ablation-scene-heading>span');title.textContent='AA-Arena · GLM-5.3 · '+title.textContent;
+    const title=document.querySelector('.ablation-scene-heading>span');title.textContent='AAArena · GLM-5.3 · '+title.textContent;
     for(const a of document.querySelectorAll('.ablation-comparison figcaption a'))a.textContent=a.textContent.replace(' ↗','');
     window.exportAnimations=document.querySelector('.ablation-scene').getAnimations({subtree:true});
     for(const animation of window.exportAnimations)animation.pause();

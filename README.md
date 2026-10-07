@@ -1,6 +1,6 @@
-# AA-Arena
+# AAArena
 
-Research website for AA-Arena (Agents for Agents Arena).
+Research website for AAArena (Agents for Agents Arena).
 
 Website: [thu-cst-sast.github.io/AAArena-Web](https://thu-cst-sast.github.io/AAArena-Web/)
 
@@ -11,8 +11,8 @@ service, AgentBench, AHL-Arena, an API, or a database.
 ## Pages
 
 - Home: visual abstract, main results, animated ablation comparisons, Dorado case
-  study, and extended-budget results.
-- Leaderboard: twelve games × five models, with human-pool rank and Elo; individual
+  study, extended-budget results, on/off-policy replay learning, tokens and algorithm families.
+- Leaderboard: twelve games × seven models, with human-pool rank and Elo; individual
   game tables and CSV export.
 - Games: twelve games, each with a leaderboard, overview, and measured records.
 - Contact: SAST, corresponding authors, project leads, and author list.
@@ -67,6 +67,8 @@ Screenshots are written to `/tmp`, not into the deployed website.
 Coverage includes four tabs, all 36 game detail views, main results and ablations,
 rank ties, CSV export, filtering, direct links, refresh/back, keyboard navigation,
 PDF access, animation controls/downloads, reduced motion, and desktop/mobile layouts.
+The manuscript fixture was extracted directly from PDF Tables 1, 2 and 9; tests
+independently check all 84 result cells and 84 token entries against it.
 
 ## Files and editing
 
@@ -94,15 +96,32 @@ npm run export:ablations
 Data are transcribed from the supplied manuscript, not a live tournament feed:
 
 - Table 1: twelve games and 1,920 archived programs, not 1,920 unique people.
-- Table 2: sixty measured cells across five models.
+- Table 2: 84 measured cells across seven models; median results of three runs.
 - Table 3: selected Dorado milestones, not a full submission history.
 - Table 4: GLM-5.3 continuation endpoints, 128/16 vs 384/48.
-- Tables 6–8: separate ablation runs, not main-table cells or multi-seed averages.
+- Tables 6–8: separate ablation settings, not main-table cells.
+- Section 4.5 / Figure 13: on-policy vs off-policy GLM-5.3 retained champions.
+- Table 9: per-game and total token use (input + output, cached input counted once).
+- Appendix E / Table 10: approximate automatic classification of the 84 champions;
+  the detailed figure is rendered directly from the supplied PDF, not estimated.
+
+Current manuscript: `Can_AI_Agent_Build_Game_Agent.pdf` (supplied 2026-10-07),
+served unchanged at `assets/aa-arena.pdf`. Its title is “Can AI Agents Build Game
+Agents for Real-World Adversarial Games?” The new version names Hongning Wang as
+the corresponding author. His contact email and profile are verified against
+[Tsinghua's faculty page](https://www.cs.tsinghua.edu.cn/csen/info/1313/4406.htm).
+
+Opus5.5 uses Claude Code; the other six models use Codex. All use max reasoning
+effort. These are model–harness configurations, not a harness-controlled comparison.
+Gold medals in paper order: 6, 4, 4, 2, 2, 3, 1. No configuration tops the other
+six frozen ladders. Feedback ceilings do not impose token or wall-clock limits.
+The paper's code link points to `THU-CST-SAST/AAArena`, which is currently private;
+this website update does not change that repository's visibility.
 
 Elo is not comparable across games; the website has no averaged Elo or overall
 model rank. The leaderboard emphasizes rank in each frozen human-program pool.
 The model columns stay in paper order; the footer counts rank-1 games.
-Pending models have no invented results. The records views do not fabricate human
+The records views do not fabricate human
 player rows, timestamps, complete match histories, or replay files.
 
 Animations are illustrations or visualizations of measured data, not executable
