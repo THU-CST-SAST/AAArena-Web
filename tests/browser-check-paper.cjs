@@ -26,20 +26,10 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
   await p.getByText('Scoring & data source',{exact:true}).click();
   assert.match(await p.locator('.source-details').innerText(),/median of three runs/);
   await nav.getByRole('link',{name:'Home',exact:true}).click();
-  await p.getByRole('button',{name:'Replay learning',exact:true}).click();
-  assert.deepEqual(await p.locator('.replay-comparison [data-elo]').evaluateAll(el=>el.map(e=>e.dataset.elo)),['2281.6','2404.4','1464.2','930.7','1436.8','1528.2']);
-  await p.screenshot({path:'/tmp/aa-latest-replay-learning.png',fullPage:true});
+  assert.deepEqual(await p.locator('[data-home]').allTextContents(),['Abstract','Main results','Ablations']);
   for(const width of [1440,390,320]){
    await p.setViewportSize({width,height:1000});
-   await p.getByRole('button',{name:'Tokens & policies',exact:true}).click();
-   await p.getByText('Per-game token table',{exact:true}).click();
-   await p.getByText('All 84 policies · paper Table 10',{exact:true}).click();
-   await p.waitForFunction(()=>document.querySelector('.policy-raw img')?.naturalWidth>0);
-   assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'expanded tables must scroll within the page at '+width);
-   await p.locator('.token-chart').screenshot({path:`/tmp/aa-latest-tokens-${width}.png`});
-   await p.getByRole('button',{name:'Replay learning',exact:true}).click();
-   await p.getByText('Exact values & off-policy budget use',{exact:true}).click();
-   assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'expanded replay table at '+width);
+   assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Home layout at '+width);
   }
   await p.setViewportSize({width:1440,height:1000});
   await p.getByRole('button',{name:'Ablations',exact:true}).click();
@@ -60,6 +50,6 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
   await p.getByRole('link',{name:'yks23@mails.tsinghua.edu.cn',exact:true}).waitFor();
   await p.getByRole('link',{name:'lql24@mails.tsinghua.edu.cn',exact:true}).waitFor();
   assert.deepEqual(errors,[]);
-  console.log('PASS: online-visible 84 paper cells, new research panels, expanded mobile tables, six ablation downloads, PDF page links and project contacts.');
+  console.log('PASS: online-visible 84 paper cells, three Home sections, mobile layouts, six ablation downloads, PDF page links and project contacts.');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
