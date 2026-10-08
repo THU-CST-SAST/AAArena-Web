@@ -10,19 +10,23 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
   await page.getByRole('heading',{name:'Abstract',exact:true}).waitFor();
   await page.locator('.visual-abstract').scrollIntoViewIfNeeded();
   await page.locator('.visual-abstract').screenshot({path:'/tmp/aa-abstract-desktop.png'});
-  assert.equal(await page.locator('.learning-cycle li').count(),4);
+  assert.deepEqual(await page.locator('.learning-cycle li>span:last-of-type').allTextContents(),['Develop a policy','Run matches','Review feedback']);
   assert.equal(await page.locator('.code-writing').evaluate(e=>getComputedStyle(e).animationName),'none','reduced motion keeps a complete static diagram');
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.locator('.learning-diagram').scrollIntoViewIfNeeded();
-  for(let phase=0;phase<4;phase++){
+  for(let phase=0;phase<3;phase++){
    await page.waitForFunction(i=>{
     const a=document.querySelector('.learning-cycle li').getAnimations()[0];
     const time=(a?.currentTime||0)%12000;
-    return time>=i*3000+600&&time<i*3000+2200;
+    return time>=i*4000+1200&&time<i*4000+2800;
    },phase,{timeout:16000});
    assert.equal(await page.locator('.learning-cycle li').nth(phase).evaluate(e=>getComputedStyle(e).color),'rgb(36, 92, 255)');
+   const signal=phase===0?'.edit-connector .flow-packet':phase===1?'.play-connector .flow-packet':'.feedback-return .return-packet';
+   assert.ok(await page.locator(signal).evaluate(e=>Number(getComputedStyle(e).opacity)>.5),'signal follows active phase '+phase);
    await page.locator('.learning-diagram').screenshot({path:`/tmp/aa-flow-phase-${phase}.png`});
   }
+  await page.waitForFunction(()=>{const time=document.querySelector('.learning-cycle li').getAnimations()[0].currentTime;return time>=12000&&time%12000<2800;},{},{timeout:16000});
+  assert.equal(await page.locator('.learning-cycle li').first().evaluate(e=>getComputedStyle(e).color),'rgb(36, 92, 255)','feedback returns directly to policy development');
   await page.keyboard.press('Control+Home');
   await page.waitForFunction(()=>!document.querySelector('.learning-motion').classList.contains('motion-visible'));
   assert.equal(await page.locator('.code-writing').evaluate(e=>getComputedStyle(e).animationPlayState),'paused','offscreen loop does not run');
@@ -40,6 +44,7 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
   await fullWidth();
   await page.getByRole('button',{name:'中文',exact:true}).click();
   assert.equal(await page.locator('.overview-thesis').innerText(),'让 AI 写策略，\n在实战中反复打磨。');
+  assert.deepEqual(await page.locator('.learning-cycle li>span:last-of-type').allTextContents(),['改策略','打对局','看反馈']);
   await page.locator('.full-abstract p').waitFor({state:'visible'});
   await fullWidth();
   await page.locator('.full-abstract').screenshot({path:'/tmp/aa-abstract-expanded-zh.png'});
@@ -68,6 +73,6 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
   await page.keyboard.press('Enter');
   await page.getByRole('heading',{name:'Pacman',exact:true}).waitFor();
   assert.deepEqual(errors,[]);
-  console.log('PASS: four live animation phases, offscreen pause, reduced motion, natural Chinese headline, mobile feedback loop; abstract ranks, expand/collapse, navigation, no overflow or page errors.');
+  console.log('PASS: three live phases with synchronized signals and direct loopback, offscreen pause, reduced motion, natural Chinese, mobile feedback loop; abstract ranks, expand/collapse, navigation, no overflow or page errors.');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

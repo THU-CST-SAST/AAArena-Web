@@ -28,12 +28,22 @@ const assert=require('node:assert/strict');
   await page.getByRole('button',{name:'消融实验',exact:true}).click();
   await page.getByRole('button',{name:'对手',exact:true}).click();
   await page.getByRole('heading',{name:'对手选择',exact:true}).waitFor();
+  assert.equal(await page.locator('.replay-learning-note').count(),0,'no replay-source note in opponent selection');
+  await page.locator('[data-ablation="batch"]').click();
+  assert.equal(await page.locator('.replay-learning-note').count(),0,'no replay-source note under Table 8');
+  await page.locator('[data-ablation="feedback"]').click();
+  await page.getByRole('heading',{name:'补充实验：回放来源',exact:true}).waitFor();
   assert.match(await page.locator('.replay-learning-note').innerText(),/在 Miracle 中效果更好，在 AntWar 中则不如自己对战/);
   assert.match(await page.locator('.replay-learning-note a').getAttribute('href'),/#page=15$/);
   await page.locator('.replay-learning-note').screenshot({path:'/tmp/aa-paper-note-zh.png'});
   await language('en').click();
   assert.match(await page.locator('.replay-learning-note').innerText(),/while still receiving full-pool evaluation feedback/);
   assert.match(await page.locator('.replay-learning-note').innerText(),/better in Miracle but worse in AntWar/);
+  for(const section of ['opponents','batch','feedback']){
+   await page.locator(`[data-ablation="${section}"]`).click();
+   assert.equal(await page.locator('.replay-learning-note').count(),section==='feedback'?1:0);
+  }
+  await page.getByRole('heading',{name:'Additional experiment: replay sources',exact:true}).waitFor();
   for(const width of [1440,390,320]){
    await page.setViewportSize({width,height:1000});
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Replay learning note at '+width);
@@ -41,6 +51,7 @@ const assert=require('node:assert/strict');
   }
   await page.setViewportSize({width:1440,height:1000});
   await language('zh').click();
+  await page.locator('[data-ablation="opponents"]').click();
   assert.equal(await page.locator('.condition-label').filter({hasText:'天梯选择'}).count(),3);
   await nav.getByRole('link',{name:'榜单',exact:true}).click();
   await page.getByLabel('游戏',{exact:true}).selectOption('pacman');
