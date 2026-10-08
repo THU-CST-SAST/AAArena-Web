@@ -21,7 +21,7 @@
   'Scoring & data source':'评分方法与数据来源','Scoring protocol':'评分方法','Search games':'搜索游戏','Sort by':'排序方式',
   'Rule complexity ↑':'规则复杂度 ↑','Pool size ↓':'选手池规模 ↓','Name A–Z':'名称 A–Z','Game category':'游戏分类',
   'Tactics':'战术','Economy':'经济','Territory':'领地','Defence':'塔防','Maze':'迷宫','Survival':'生存',
-  'No matching games':'没有匹配的游戏','Try another name or clear the filters.':'请尝试其他名称，或清除筛选条件。','Clear filters':'清除筛选',
+  'No matching games':'没有匹配的游戏','Try another name or clear the search.':'换个名称试试，或清空搜索。','Clear search':'清空搜索',
   'Pool sizes count programs, not unique players. AST measures rule-description size, not optimal-play difficulty.':'选手池大小按程序数量计算，同一选手的不同程序分别计数。AST 节点数反映规则本身有多复杂，不代表找到最优策略有多难。',
   'Competitive maze collection':'迷宫吃豆，争夺分数','Snake movement and territory':'操控贪吃蛇，圈地争胜','Asymmetric maze pursuit':'迷宫追逐：吃豆人与幽灵',
   'Mining and resource control':'占领金矿，积累财富','Tower defence and economy':'建造防线，经营蚁群','Multiplayer survival and escape':'空间站求生与逃脱',
