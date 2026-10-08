@@ -12,6 +12,7 @@ const assert=require('node:assert/strict');
   assert.equal(await page.locator('html').getAttribute('lang'),'en','first visit stays English even for a Chinese browser');
   await language('zh').click();
   assert.equal(await page.locator('html').getAttribute('lang'),'zh-CN');
+  await page.getByText('AI 能为真实对抗游戏编写策略吗？',{exact:true}).waitFor();
   await page.getByRole('heading',{name:'摘要',exact:true}).waitFor();
   await page.getByRole('button',{name:'主要结果',exact:true}).click();
   assert.equal(await page.locator('.matrix tbody tr').count(),12);
