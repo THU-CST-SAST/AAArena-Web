@@ -133,8 +133,8 @@ function ablationComparison(key){
  }).join('')}</div>`;
 }
 function renderHome(){
- $('#main').innerHTML=`<section class="home-hero"><div class="home-title"><h1>AAArena<span>.</span></h1><p class="paper-title">${esc(window.ARENA.paper.title)}</p><div class="home-actions">${external(paper(),'Paper','btn primary')}<a class="btn" href="#/leaderboard">Leaderboard →</a></div></div><div class="motion" id="hero-motion"><canvas width="1200" height="675" role="img" aria-label="Policy iteration illustration"></canvas><div class="motion-controls"><div role="group" aria-label="Animation">${[['loop','Iteration'],['dorado','Dorado']].map(([k,l])=>`<button data-motion-kind="${k}" aria-pressed="${k==='loop'}" class="${k==='loop'?'active':''}">${l}</button>`).join('')}</div><button data-motion-toggle aria-label="Pause animation">Pause</button><div class="motion-downloads"><a data-motion-download="mp4" href="assets/aa-arena-loop.mp4" download>MP4 ↓</a><a data-motion-download="gif" href="assets/aa-arena-loop.gif" download>GIF ↓</a></div></div></div></section><div class="home-content"><nav class="home-nav" aria-label="Research sections">${[['abstract','Abstract'],['results','Main results'],['ablations','Ablations']].map(([k,l])=>`<button data-home="${k}" class="${k===homeSection?'active':''}" aria-pressed="${k===homeSection}">${l}</button>`).join('')}</nav><div class="home-pane" id="home-pane"></div></div>`;
- window.ArenaMotion.mount($('#hero-motion'));renderHomePane();$$('[data-home]').forEach(b=>b.addEventListener('click',()=>{homeSection=b.dataset.home;$$('[data-home]').forEach(el=>{el.classList.toggle('active',el===b);el.setAttribute('aria-pressed',String(el===b));});renderHomePane();}));
+ $('#main').innerHTML=`<section class="home-hero"><div class="home-title"><h1>AAArena<span>.</span></h1><p class="paper-title">${esc(window.ARENA.paper.title)}</p><div class="home-actions">${external(paper(),'Paper','btn primary')}<a class="btn" href="#/leaderboard">Leaderboard →</a></div></div></section>${window.ArenaReplay.markup()}<div class="home-content"><nav class="home-nav" aria-label="Research sections">${[['abstract','Abstract'],['results','Main results'],['ablations','Ablations']].map(([k,l])=>`<button data-home="${k}" class="${k===homeSection?'active':''}" aria-pressed="${k===homeSection}">${l}</button>`).join('')}</nav><div class="home-pane" id="home-pane"></div></div>`;
+ window.ArenaReplay.mount($('#main'));renderHomePane();$$('[data-home]').forEach(b=>b.addEventListener('click',()=>{homeSection=b.dataset.home;$$('[data-home]').forEach(el=>{el.classList.toggle('active',el===b);el.setAttribute('aria-pressed',String(el===b));});renderHomePane();}));
 }
 function renderHomePane(){
  const el=$('#home-pane');
@@ -163,7 +163,7 @@ function bindDownloads(){
  });
 }
 function route(){
- window.ArenaMotion.stop();
+ window.ArenaReplay.dispose();
  const parts=location.hash.replace(/^#\/?/,'').split('/');let page=parts[0]||'home';
  if(page==='results')page='leaderboard';
  if(!['home','leaderboard','games','contact'].includes(page))page='home';
@@ -182,11 +182,10 @@ function route(){
 $$('[data-language]').forEach(button=>button.addEventListener('click',()=>{
  if(button.dataset.language===i18n.language)return;
  const scroll=window.scrollY,openDetails=$$('#main details').map(d=>d.open);
- const animation=$('[data-motion-kind][aria-pressed="true"]')?.dataset.motionKind;
- const wasPaused=$('[data-motion-toggle]')?.textContent===t('Play');
+ const previewsPaused=$('.replay-overview-toggle')?.getAttribute('aria-pressed')==='false';
  i18n.set(button.dataset.language);route();
  $$('#main details').forEach((d,i)=>{d.open=Boolean(openDetails[i]);});
- if(animation){$(`[data-motion-kind="${animation}"]`)?.click();if(($('[data-motion-toggle]')?.textContent===t('Play'))!==wasPaused)$('[data-motion-toggle]')?.click();}
+ if(previewsPaused&&$('.replay-overview-toggle')?.getAttribute('aria-pressed')==='true')$('.replay-overview-toggle').click();
  window.scrollTo(0,scroll);button.focus({preventScroll:true});
 }));
 document.addEventListener('visibilitychange',()=>$('.ablation-scene')?.classList.toggle('ablation-suspended',document.hidden));

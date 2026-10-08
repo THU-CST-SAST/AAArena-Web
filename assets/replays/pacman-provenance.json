@@ -1,0 +1,70 @@
+{
+  "game": "pacman",
+  "model": "opus-5.5",
+  "source_commit": "fcb87bea85c82260969d558e7b340bce95a68db8",
+  "human": {
+    "id": "pacman__p43__ai895",
+    "rank": 1,
+    "elo": 2197.773441
+  },
+  "ai": {
+    "elo": 2703.915,
+    "rank": 1,
+    "snapshot": "f7f30f7d7c2a3dc9c4b5ff6b7f8b8209e9324cf46e0986f3c177cb4f4532aade",
+    "strategy_hash": "dfc5c26406356c45325300eb965cf329329d812fa1e6a50759f4661f0dd8f77c"
+  },
+  "seed": 42,
+  "matches": [
+    {
+      "status": "complete",
+      "winner": "P0",
+      "scores": {
+        "P0": 1.0,
+        "P1": 0.0
+      },
+      "rounds": 601,
+      "diagnostic": null,
+      "payload": {
+        "legacy_winner": 0,
+        "official_draw": false,
+        "failed_roles": []
+      },
+      "ai_seat": 0,
+      "raw_sha256": "5bcecd4e1afbc473581a657830b25f5bd05717c7f2fe29f4207c460b1e6db77f",
+      "raw_file": "pacman-ai-p0.txt",
+      "display_final_scores": [
+        1556,
+        519
+      ],
+      "state_count": 601,
+      "terminal_verified": true
+    },
+    {
+      "status": "complete",
+      "winner": "P1",
+      "scores": {
+        "P0": 0.0,
+        "P1": 1.0
+      },
+      "rounds": 601,
+      "diagnostic": null,
+      "payload": {
+        "legacy_winner": 1,
+        "official_draw": false,
+        "failed_roles": []
+      },
+      "ai_seat": 1,
+      "raw_sha256": "59355a743d2acbccc4b6beaf848042c3f6c2fc123c8d0eff7a9a377a6f2999a1",
+      "raw_file": "pacman-ai-p1.txt",
+      "display_final_scores": [
+        454,
+        1539
+      ],
+      "state_count": 601,
+      "terminal_verified": true
+    }
+  ],
+  "purpose": "New exhibition matches, not original paper evaluation matches",
+  "selection": "Highest main-table AI Elo versus rank 1 of the frozen human pool; both seats, seed 42",
+  "visualization": "Recorded full-information states, simplified 2D rendering; no generated moves"
+}

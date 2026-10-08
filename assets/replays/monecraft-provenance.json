@@ -1,0 +1,70 @@
+{
+  "game": "monecraft",
+  "model": "gpt-6-sol",
+  "source_commit": "fcb87bea85c82260969d558e7b340bce95a68db8",
+  "human": {
+    "id": "monecraft__p672__ai6935",
+    "rank": 1,
+    "elo": 2341.77665
+  },
+  "ai": {
+    "elo": 2418.228,
+    "rank": 1,
+    "snapshot": "359f4fb6e0cd7f78003def6046d425af8449dabf4d953d44b42dee1aa7d529a1",
+    "strategy_hash": "4550a2743e02174a71dd4ce356698c9e3685c9564501d576f647bb01820413bc"
+  },
+  "seed": 42,
+  "matches": [
+    {
+      "status": "complete",
+      "winner": "P1",
+      "scores": {
+        "P0": 0.0,
+        "P1": 1.0
+      },
+      "rounds": 999,
+      "diagnostic": null,
+      "payload": {
+        "legacy_winner": 1,
+        "official_draw": false,
+        "failed_roles": []
+      },
+      "ai_seat": 0,
+      "raw_sha256": "f7c88c41ab83db0f3ea7dcb1d44eb6e5e9ce17819f408d98adabfeb7959fdae4",
+      "raw_file": "monecraft-ai-p0.txt",
+      "display_final_scores": [
+        20880,
+        32410
+      ],
+      "state_count": 1001,
+      "terminal_verified": true
+    },
+    {
+      "status": "complete",
+      "winner": "P0",
+      "scores": {
+        "P0": 1.0,
+        "P1": 0.0
+      },
+      "rounds": 999,
+      "diagnostic": null,
+      "payload": {
+        "legacy_winner": 0,
+        "official_draw": false,
+        "failed_roles": []
+      },
+      "ai_seat": 1,
+      "raw_sha256": "72e8fd2576145bb2f30fc9bc0732bc827834f4f14789d12492068c0cf3de2866",
+      "raw_file": "monecraft-ai-p1.txt",
+      "display_final_scores": [
+        24040,
+        22810
+      ],
+      "state_count": 1001,
+      "terminal_verified": true
+    }
+  ],
+  "purpose": "New exhibition matches, not original paper evaluation matches",
+  "selection": "Highest main-table AI Elo versus rank 1 of the frozen human pool; both seats, seed 42",
+  "visualization": "Recorded full-information states, simplified 2D rendering; no generated moves"
+}

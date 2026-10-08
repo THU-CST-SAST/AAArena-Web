@@ -1,0 +1,70 @@
+{
+  "game": "dorado",
+  "model": "gpt-6-sol",
+  "source_commit": "fcb87bea85c82260969d558e7b340bce95a68db8",
+  "human": {
+    "id": "dorado__p1859__ai22546",
+    "rank": 1,
+    "elo": 2305.444297
+  },
+  "ai": {
+    "elo": 2271.475,
+    "rank": 2,
+    "snapshot": "f4c0bf15e2f55376bbfbe29d80f127fbf45e44fa4ee66d6fe43af45ab02b8c1a",
+    "strategy_hash": "9706e8b892e9a0588545442360fb59892cf59c85e2111cc1ec0aa608773ec28d"
+  },
+  "seed": 42,
+  "matches": [
+    {
+      "status": "complete",
+      "winner": "P1",
+      "scores": {
+        "P0": 0.0,
+        "P1": 1.0
+      },
+      "rounds": 410,
+      "diagnostic": null,
+      "payload": {
+        "legacy_winner": 1,
+        "official_draw": false,
+        "failed_roles": []
+      },
+      "ai_seat": 0,
+      "raw_sha256": "3c0841879df9c78a10c516e4202cfe6d2748ea4f8fc477e798946f2d6dffd696",
+      "raw_file": "dorado-ai-p0.zip",
+      "display_final_scores": [
+        0,
+        3000
+      ],
+      "state_count": 411,
+      "terminal_verified": true
+    },
+    {
+      "status": "complete",
+      "winner": "P0",
+      "scores": {
+        "P0": 1.0,
+        "P1": 0.0
+      },
+      "rounds": 488,
+      "diagnostic": null,
+      "payload": {
+        "legacy_winner": 0,
+        "official_draw": false,
+        "failed_roles": []
+      },
+      "ai_seat": 1,
+      "raw_sha256": "19ac11226c9afe14bc48be5358de79a213e781cf388c5c31d4a3314c44563881",
+      "raw_file": "dorado-ai-p1.zip",
+      "display_final_scores": [
+        3000,
+        0
+      ],
+      "state_count": 489,
+      "terminal_verified": true
+    }
+  ],
+  "purpose": "New exhibition matches, not original paper evaluation matches",
+  "selection": "Highest main-table AI Elo versus rank 1 of the frozen human pool; both seats, seed 42",
+  "visualization": "Recorded full-information states, simplified 2D rendering; no generated moves"
+}

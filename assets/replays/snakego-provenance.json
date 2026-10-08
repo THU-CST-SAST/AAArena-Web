@@ -1,0 +1,62 @@
+{
+  "game": "snakego",
+  "model": "opus-5.5",
+  "source_commit": "fcb87bea85c82260969d558e7b340bce95a68db8",
+  "human": {
+    "id": "anon__710a5f8e1d0c626b__d0c3ba1c9580dd0d__v3",
+    "rank": 1,
+    "elo": 1253.052012
+  },
+  "ai": {
+    "elo": 1860.876,
+    "rank": 1,
+    "snapshot": "c2e01dcd07f3b68d6e4596a7563eae966d2eec5e08dee2c6a90a09c9f0f01d89",
+    "strategy_hash": "89b4a2a58b7baca2f1729dcdd9eb3fb41ef842f6caab4e644e863fb65ab649af"
+  },
+  "seed": 42,
+  "matches": [
+    {
+      "status": "complete",
+      "winner": "P0",
+      "scores": {
+        "P0": 238.0,
+        "P1": 25.0
+      },
+      "rounds": 512,
+      "diagnostic": null,
+      "payload": {},
+      "ai_seat": 0,
+      "raw_sha256": "be2bcda01179f54ddc70e90d779d6c40f81e5ac63ef2661484fce7b06e6cf727",
+      "raw_file": "snakego-ai-p0.json",
+      "display_final_scores": [
+        238,
+        25
+      ],
+      "state_count": 1025,
+      "terminal_verified": true
+    },
+    {
+      "status": "complete",
+      "winner": "P1",
+      "scores": {
+        "P0": 59.0,
+        "P1": 150.0
+      },
+      "rounds": 512,
+      "diagnostic": null,
+      "payload": {},
+      "ai_seat": 1,
+      "raw_sha256": "b78388cf481ffc3a11812eb422596166eed65e17c3f736cd80488798ac207afa",
+      "raw_file": "snakego-ai-p1.json",
+      "display_final_scores": [
+        59,
+        150
+      ],
+      "state_count": 1025,
+      "terminal_verified": true
+    }
+  ],
+  "purpose": "New exhibition matches, not original paper evaluation matches",
+  "selection": "Highest main-table AI Elo versus rank 1 of the frozen human pool; both seats, seed 42",
+  "visualization": "Recorded full-information states, simplified 2D rendering; no generated moves"
+}

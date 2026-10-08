@@ -10,7 +10,7 @@ service, AgentBench, AHL-Arena, an API, or a database.
 
 ## Pages
 
-- Home: visual abstract, main results, and animated ablation comparisons.
+- Home: clickable real-match replay overview, visual abstract, main results, and animated ablation comparisons.
 - Leaderboard: twelve games × seven models, with human-pool rank and Elo; individual
   game tables and CSV export.
 - Games: twelve games, each with a leaderboard, detailed gameplay guide, and measured records.
@@ -86,7 +86,9 @@ independently check all 84 result cells and 84 token entries against it.
 - `app.js`: routes, research panels, leaderboards, game details, CSV export.
 - `data.js`: manuscript measurements; `details.js`: game summaries.
 - `styles.css`: black/white/blue theme and responsive layout.
-- `motion.js`: workflow and Dorado canvas animations.
+- `replays.js` / `replays.css`: replay gallery and full-match viewer.
+- `assets/replays/`: verified state sequences, original match files and provenance.
+- `motion.js`: legacy media exporter only; no longer loaded by the website.
 - `assets/`: manuscript PDF, downloadable GIF/MP4 animations, and posters.
 - `tests/`: browser interaction tests; `tools/`: animation exporters.
 
@@ -134,6 +136,55 @@ The model columns stay in paper order; the footer counts rank-1 games.
 The records views do not fabricate human
 player rows, timestamps, complete match histories, or replay files.
 
-Animations are illustrations or visualizations of measured data, not executable
-game replays. Ablation panels preserve exact measurements and display within-game
+The homepage gallery plays real referee states; the ablation animations are
+visualizations of measured data, not gameplay. Ablation panels preserve exact measurements and display within-game
 differences from fixed references. The same charts are exported as GIF/MP4.
+
+## Real-match showcase
+
+Four games currently have replays: SnakeGo, Pacman, MoneCraft and Dorado. Click any
+preview to open a full match, seek, change playback speed, switch seats, or download
+the original replay and its provenance. English/Chinese, keyboard controls, small
+screens and reduced-motion preferences are supported. Offscreen/background
+previews pause; frames are not redrawn until the recorded state changes.
+
+These are **new exhibition matches**, not the original paper evaluation matches.
+For each game, the highest-Elo AI policy in the main table faces the rank-1 program
+in the frozen human pool. “Human champion” refers to that pool rank, not a claimed
+historical competition title. A seed of 42 and both seat assignments were used;
+all eight games completed normally. Both AI wins and human wins are included.
+Results do not change the manuscript's Elo tables and do not estimate win rates.
+
+| Game | AI model | AI P0: P0–P1 | AI P1: P0–P1 | Score unit |
+| --- | --- | --- | --- | --- |
+| SnakeGo | Opus5.5 | 238–25 | 59–150 | Territory points |
+| Pacman | Opus5.5 | 1556–519 | 454–1539 | Points |
+| MoneCraft | GPT6-sol | 20880–32410 | 24040–22810 | Gold |
+| Dorado | GPT6-sol | 0–3000 | 3000–0 | Remaining base HP |
+
+AI exports: `agentlab:/home/qingle/agentbench/exports/main-table-champions-84-20261006/`.
+Match runner and records: `agentlab:/home/qingle/agentbench/AA-Arena-Web-Replays/`,
+under `runs/web-showcase-20261008/`. Strategies were not edited; hashes were checked
+before and after play. Runtime/game packs came from `SAST-agent/AA-Arena` at
+`fcb87bea85c82260969d558e7b340bce95a68db8`. No server connection is needed for viewing.
+
+`tools/import-replays.py` accepts a sanitized export bundle (match records plus
+gzip/base64 raw replays and their SHA-256 values) and an installed runtime checkout:
+
+```sh
+python3 tools/import-replays.py /path/to/bundle.json /path/to/AA-Arena
+```
+
+It verifies each original replay hash, all SnakeGo processed operations and round
+events against the pinned backend, and all eight terminal outcomes against referee
+records. Pacman map/mine deltas are applied in order. MoneCraft and Dorado maps are
+transposed from their x-major backend storage. Static terrain is cached in the viewer.
+Dorado records negative terminal HP; the display clamps it to zero, not gold/property.
+The public per-game provenance files retain source commit, frozen-policy hash,
+human-pool identity, both results and original replay hashes.
+
+Rendering is a simplified, full-information 2D view of recorded states, not the
+original competition client or a video, and not either player's limited observation.
+No moves or match outcomes are generated in the browser. Unit art is schematic;
+the current viewer does not reproduce every original particle/effect animation.
+The compressed state payload is about 225 KB over gzip (both seats, all four games).
