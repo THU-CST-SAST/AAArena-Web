@@ -69,6 +69,8 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
   await detail('Records');await page.getByRole('heading',{name:'Main-stage records'}).waitFor();
  }
  await go('Contact');await shot('contact');
+ assert.ok(await page.locator('.contact-layout').evaluate(el=>Math.abs(el.getBoundingClientRect().left+el.getBoundingClientRect().width/2-innerWidth/2)<2),'contact layout should be centered');
+ assert.ok(await page.locator('.contact-entry').evaluateAll(entries=>entries.every(el=>el.querySelector('a').getBoundingClientRect().top>=el.querySelector('h3').getBoundingClientRect().bottom)),'email should sit below its name, not at the far edge');
  assert.equal(await page.locator('a[href^="mailto:"]').count(),2);
  await page.getByRole('heading',{name:'Kaisen Yang'}).waitFor();
  const [pdf]=await Promise.all([page.waitForEvent('popup'),page.getByRole('link',{name:'Paper',exact:true}).click()]);await pdf.waitForLoadState('domcontentloaded');assert.ok(pdf.url().includes('/assets/aa-arena.pdf'));await pdf.close();
