@@ -27,6 +27,9 @@ service, AgentBench, AHL-Arena, an API, or a database.
   offscreen/in hidden tabs and becomes static with reduced-motion preferences.
   The separate replay-source experiment (§4.5) is labeled as an additional study
   under replay feedback only, not under opponent selection or batch size.
+  A separate Saiblo/competition introduction follows the full abstract. Its
+  saiblo.net link stays visible even when both disclosures are closed; background
+  information links to the organizers and official competition guide.
 - Leaderboard: twelve games × seven models, with human-pool rank and Elo; individual
   game tables and CSV export.
 - Games: twelve games, each with a leaderboard, detailed gameplay guide, and measured records.

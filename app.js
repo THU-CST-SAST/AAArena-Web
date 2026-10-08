@@ -136,6 +136,14 @@ function abstract(){
    <p class="overview-limits">Understanding complex rules, implementing effective strategies, and planning long-term improvement remain challenges.</p>
   </section>
   <details class="full-abstract"><summary>Read the full abstract</summary><p>${esc(window.ARENA.paper.abstract)}</p></details>
+  <section class="competition-origin" aria-label="Saiblo & the Tsinghua Agent Competition">
+   ${external('https://www.saiblo.net/','www.saiblo.net','competition-link')}
+   <details><summary>Saiblo & the Tsinghua Agent Competition</summary><div class="competition-copy">
+    <p>Saiblo is the online platform used by the Tsinghua Agent Competition. Participants write programs that play games autonomously; the platform runs matches and provides a place to test and improve their strategies.</p>
+    <p>Founded in 1997, the competition is organized by the Agent Department of Tsinghua University’s Computer Science Student Association for Science and Technology. Students design the games and build the backends and player SDKs. AAArena draws on games and human-written programs from past competitions, turning years of competitive play into a benchmark for AI-written strategies.</p>
+    <div class="competition-sources">${external('https://agent-guide.net9.org/','Competition guide')}${external('https://net9.org/home/','About the organizers')}</div>
+   </div></details>
+  </section>
  </article>`;
 }
 function ablationComparison(key){

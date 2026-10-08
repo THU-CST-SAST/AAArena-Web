@@ -4,6 +4,10 @@
  let language='en';
  try { if(localStorage.getItem('aaarena-language')==='zh')language='zh'; } catch {}
  const words = new Map(Object.entries({
+  'Saiblo & the Tsinghua Agent Competition':'Saiblo 与清华大学智能体大赛',
+  'Saiblo is the online platform used by the Tsinghua Agent Competition. Participants write programs that play games autonomously; the platform runs matches and provides a place to test and improve their strategies.':'Saiblo 是清华大学智能体大赛的在线对战平台。参赛者写代码，让程序自主参加游戏对抗，再通过平台上的对局检验、改进自己的策略。',
+  'Founded in 1997, the competition is organized by the Agent Department of Tsinghua University’s Computer Science Student Association for Science and Technology. Students design the games and build the backends and player SDKs. AAArena draws on games and human-written programs from past competitions, turning years of competitive play into a benchmark for AI-written strategies.':'清华大学智能体大赛始于 1997 年，由清华大学计算机系学生科协智能体部组织，游戏策划、后端开发和选手 SDK 也由同学们完成。AAArena 收集了历届比赛的游戏与人类选手程序，用这些真实比赛积累下来的策略，检验 AI 编写游戏策略的能力。',
+  'Competition guide':'参赛指南','About the organizers':'主办团队介绍',
   'About these metrics':'指标说明',
   'Median of 3 runs · Table 2':'3 次实验的中位数 · 表 2',
   'Median of 3 runs · 128 / 16':'3 次实验的中位数 · 128 / 16 预算',

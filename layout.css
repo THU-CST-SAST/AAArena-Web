@@ -157,6 +157,15 @@ html[lang="zh-CN"] :is(h1,h2,h3,h4) { letter-spacing: 0; }
 .visual-abstract .overview-takeaway { font-size: var(--type-small); line-height: 1.8; margin-top: 16px; }
 .full-abstract { padding-top: 24px; }
 .full-abstract summary { font-size: var(--type-small); }
+.competition-origin { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); }
+.competition-origin summary { cursor: pointer; font-size: var(--type-small); }
+.competition-link { float: right; margin-left: 24px; color: var(--accent); font-size: var(--type-small); text-decoration: underline; text-underline-offset: 4px; }
+.competition-copy { clear: both; padding-top: 18px; }
+.visual-abstract .competition-copy p { font-size: var(--type-body); line-height: 1.85; margin: 0 0 14px; }
+.competition-sources { display: flex; flex-wrap: wrap; gap: 12px 24px; font-size: var(--type-small); }
+@media(max-width:700px) {
+ .competition-link { float: none; display: inline-block; margin: 0 0 14px; }
+}
 
 /* Equal SVG widths also keep all ablation tracks and axes on one baseline. */
 .ablation-scene-heading { margin: 24px 0; align-items: center; }
