@@ -122,6 +122,12 @@ html[lang="zh-CN"] :is(h1,h2,h3,h4) { letter-spacing: 0; }
 .replay-intro h2 { font-size: 32px; line-height: 1.2; font-weight: 600; letter-spacing: -.8px; }
 .replay-kicker { font-size: var(--type-caption); letter-spacing: 1px; }
 .replay-intro .replay-disclosure { font-size: var(--type-caption); }
+.replay-intro .replay-method { font-size: var(--type-body); color: var(--ink); line-height: 1.65; }
+.visual-abstract .overview-limits { font-size: var(--type-small); line-height: 1.8; color: var(--muted); margin: 6px 0 0; }
+.replay-learning-note { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line); }
+.replay-learning-note h3 { font-size: 18px; font-weight: 600; margin: 0 0 10px; }
+.replay-learning-note p { font-size: var(--type-body); line-height: 1.8; color: var(--muted); margin: 0 0 12px; }
+.replay-learning-note a { font-size: var(--type-small); }
 .replay-card-head h3 { font-size: 18px; font-weight: 600; }
 .replay-card-head>span, .replay-card-goal, .replay-card-foot { font-size: var(--type-caption); line-height: 1.5; }
 .replay-card-head { min-height: 44px; }
