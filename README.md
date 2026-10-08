@@ -86,6 +86,11 @@ independently check all 84 result cells and 84 token entries against it.
 - `app.js`: routes, research panels, leaderboards, game details, CSV export.
 - `data.js`: manuscript measurements; `details.js`: game summaries.
 - `styles.css`: black/white/blue theme and responsive layout.
+- `layout.css`: shared typography and component alignment; loaded last. Captions
+  use 12 px, controls 14 px, body 15 px, section titles 24 px, page titles 36 px
+  (22/30 px for titles on mobile). Rank identity and value stay in one centered
+  group. Budget groups share metric-column widths; ablation SVGs share equal
+  padding and scale. Change these component rules instead of isolated offsets.
 - `replays.js` / `replays.css`: replay gallery and full-match viewer.
 - `assets/replays/`: verified state sequences, original match files and provenance.
 - `motion.js`: legacy media exporter only; no longer loaded by the website.
@@ -95,6 +100,10 @@ independently check all 84 result cells and 84 token entries against it.
 Edit measurements in `data.js`, rather than embedding a second copy in the UI.
 When scripts or styles change, update the query-string version in `index.html`
 to invalidate browser caches.
+
+`tests/browser-check-layout.cjs` checks English and Chinese at 1440, 1024, 768,
+390 and 320 px: card boundaries, rank centers, budget widths, chart baselines and
+header size. These geometry checks supplement, not replace, visual inspection.
 
 To regenerate media (also requires `ffmpeg`):
 
