@@ -318,3 +318,98 @@ html[lang="zh-CN"] :is(h1,h2,h3,h4) { letter-spacing: 0; }
  .replay-card-goal { padding: 0 9px 4px; min-height: 40px; }
  .replay-card-foot { padding: 8px 9px; min-height: 60px; font-size: 11px; }
 }
+
+/* A twelve-second explanatory loop, not a simulation of measured improvement. */
+.visual-abstract .overview-thesis { margin-bottom: 16px; }
+.visual-abstract .overview-method { font-size: 15px; line-height: 1.8; margin-bottom: 28px; }
+.learning-cycle { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 20px; list-style: none; padding: 0; margin: 0 0 36px; }
+.learning-cycle li { position: relative; padding: 0 0 12px; border-bottom: 2px solid var(--line); color: var(--muted); font-size: 14px; animation: cycle-label 12s linear infinite; animation-delay: var(--phase); }
+.cycle-number { font-size: 12px; margin-right: 10px; font-variant-numeric: tabular-nums; }
+.learning-cycle i { position: absolute; bottom: -2px; left: 0; height: 2px; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; animation: cycle-progress 12s linear infinite; animation-delay: var(--phase); }
+.learning-motion .learning-node>svg { border-radius: 12px; transition: background .3s; }
+.mobile-feedback { display: none; }
+.model-node>svg { animation: model-working 12s linear infinite; }
+.policy-node>svg { animation: policy-working 12s linear infinite; }
+.pool-node>svg { animation: pool-working 12s linear infinite; }
+.code-writing { stroke-dasharray: 100; animation: write-code 12s linear infinite; }
+.code-cursor { opacity: 0; animation: code-cursor 12s steps(1) infinite; }
+.flow-connector .flow-packet { fill: var(--accent); stroke: none; opacity: 0; animation: send-policy 12s linear infinite; }
+.play-connector .flow-packet { animation-name: play-policy; }
+.pool-node rect { animation: opponent-match 12s linear infinite; }
+.pool-node rect:nth-child(2n) { animation-delay: .45s; }
+.pool-node rect:nth-child(3n) { animation-delay: .9s; }
+.learning-motion .feedback-return { border: 0; }
+.feedback-return>svg { position: absolute; inset: 0; width: 100%; height: 40px; fill: none; }
+.return-track { stroke: var(--line); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.return-packet { stroke: var(--accent); stroke-width: 3; stroke-dasharray: 9 101; stroke-dashoffset: 9; opacity: 0; vector-effect: non-scaling-stroke; animation: return-feedback 12s linear infinite; }
+.learning-motion .feedback-return>span { z-index: 1; }
+.learning-motion:not(.motion-visible) *, .learning-motion.motion-hidden * { animation-play-state: paused !important; }
+@keyframes cycle-label {
+ 0%,23% { color: var(--accent); }
+ 25%,100% { color: var(--muted); }
+}
+@keyframes cycle-progress {
+ 0% { transform: scaleX(0); opacity: 1; }
+ 23% { transform: scaleX(1); opacity: 1; }
+ 25%,100% { transform: scaleX(1); opacity: 0; }
+}
+@keyframes model-working {
+ 0%,22%,78%,97% { background: var(--soft); color: var(--accent); }
+ 26%,73%,100% { background: transparent; color: var(--ink); }
+}
+@keyframes policy-working {
+ 0%,3%,50%,74%,100% { background: transparent; color: var(--ink); }
+ 10%,46%,82%,97% { background: var(--soft); color: var(--accent); }
+}
+@keyframes pool-working {
+ 0%,24%,74%,100% { background: transparent; color: var(--ink); }
+ 30%,67% { background: var(--soft); color: var(--accent); }
+}
+@keyframes write-code {
+ 0% { stroke-dashoffset: 100; }
+ 20%,74% { stroke-dashoffset: 0; }
+ 78% { stroke-dashoffset: 75; }
+ 96%,100% { stroke-dashoffset: 0; }
+}
+@keyframes code-cursor {
+ 0%,8%,16%,76%,84%,92% { opacity: 1; }
+ 4%,12%,20%,80%,88%,96%,100% { opacity: 0; }
+}
+@keyframes send-policy {
+ 0%,2%,23%,74%,98%,100% { opacity: 0; transform: translateX(0); }
+ 4%,77% { opacity: 1; transform: translateX(0); }
+ 21%,96% { opacity: 1; transform: translateX(62px); }
+}
+@keyframes play-policy {
+ 0%,25%,48%,100% { opacity: 0; transform: translateX(0); }
+ 27% { opacity: 1; transform: translateX(0); }
+ 46% { opacity: 1; transform: translateX(62px); }
+}
+@keyframes opponent-match {
+ 0%,26%,52%,100% { fill: transparent; }
+ 31%,37%,44% { fill: var(--soft); stroke: var(--accent); }
+ 34%,41%,48% { fill: var(--accent); stroke: var(--accent); }
+}
+@keyframes return-feedback {
+ 0%,49% { opacity: 0; stroke-dashoffset: 9; }
+ 51% { opacity: 1; stroke-dashoffset: 9; }
+ 74% { opacity: 1; stroke-dashoffset: -101; }
+ 76%,100% { opacity: 0; stroke-dashoffset: -101; }
+}
+@media(max-width:700px) {
+ .learning-motion .learning-flow { position: relative; padding-left: 24px; }
+ .mobile-feedback { display: block; position: absolute; top: 30px; left: 0; height: calc(100% - 60px); width: 20px; fill: none; }
+ .learning-motion .feedback-return { margin: 18px 0 0; height: auto; }
+ .learning-motion .feedback-return>svg, .learning-motion .feedback-return:before { display: none; }
+ .learning-motion .feedback-return>span { top: auto; padding: 0; }
+ .learning-cycle { gap: 10px; margin-bottom: 26px; }
+ .learning-cycle li { font-size: 12px; }
+ .cycle-number { display: block; margin: 0 0 4px; }
+ .visual-abstract .overview-method { font-size: 14px; }
+}
+@media(prefers-reduced-motion:reduce) {
+ .learning-motion * { animation: none !important; }
+ .learning-cycle i, .flow-packet, .return-packet, .code-cursor { display: none; }
+ .code-writing { stroke-dashoffset: 0; }
+ .return-track { stroke: var(--accent); }
+}

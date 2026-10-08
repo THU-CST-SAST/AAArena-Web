@@ -104,22 +104,25 @@ function renderDetail(g,tab){
 function abstract(){
  const icons={
   model:'<path d="M24 17h48v46H24zM16 28h8m-8 12h8m-8 12h8m48-24h8m-8 12h8m-8 12h8M36 9v8m12-8v8m12-8v8M36 63v8m12-8v8m12-8v8"/><path d="m36 40 8 8 16-17" class="diagram-blue"/>',
-  code:'<rect x="15" y="10" width="66" height="60" rx="2"/><path d="M15 24h66M23 17h3m5 0h3"/><path d="m35 36-9 9 9 9m26-18 9 9-9 9m-17 5 8-28" class="diagram-blue"/>',
+  code:'<rect x="15" y="10" width="66" height="60" rx="2"/><path d="M15 24h66M23 17h3m5 0h3"/><path d="M25 36h29m-29 10h45m-45 10h35" pathLength="100" class="diagram-blue code-writing"/><path d="M65 54v8" class="diagram-blue code-cursor"/>',
   pool:'<rect x="7" y="13" width="22" height="22"/><rect x="37" y="13" width="22" height="22"/><rect x="67" y="13" width="22" height="22"/><rect x="7" y="45" width="22" height="22"/><rect x="37" y="45" width="22" height="22"/><rect x="67" y="45" width="22" height="22"/><path d="m12 24 4 4 8-9m18 37 4 4 8-9" class="diagram-blue"/>'
  };
  const icon=k=>`<svg viewBox="0 0 96 80" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">${icons[k]}</svg>`;
  return `<article class="abstract visual-abstract">
   <header class="overview-heading"><h2>Abstract</h2><span>Adversarial Heuristic Learning</span></header>
-  <h3 class="overview-thesis">Fixed model.<br><span>Evolving code.</span></h3>
-  <figure class="learning-diagram" aria-label="A coding agent revises an executable policy, which plays frozen human opponents. Match replays and full-pool rankings feed back into the next revision.">
+  <h3 class="overview-thesis">Write. Play. Review.<br><span>Revise the code.</span></h3>
+  <p class="overview-method">No model retraining. The agent uses game feedback to revise its code, tools and notes.</p>
+  <figure class="learning-diagram learning-motion" aria-label="A coding agent revises an executable policy, which plays frozen human opponents. Match replays and full-pool rankings feed back into the next revision.">
+   <ol class="learning-cycle" aria-label="Policy improvement cycle">${['Write a policy','Play opponents','Review feedback','Revise the code'].map((s,i)=>`<li style="--phase:${i*3}s"><span class="cycle-number" aria-hidden="true">0${i+1}</span><span>${s}</span><i aria-hidden="true"></i></li>`).join('')}</ol>
    <div class="learning-flow">
-    <div class="learning-node">${icon('model')}<h4>Coding agent</h4><span>Base model stays fixed</span></div>
-    <div class="flow-connector" aria-hidden="true"><span>edits</span><svg viewBox="0 0 72 16"><path d="M0 8h69m-7-6 7 6-7 6"/></svg></div>
+    <svg class="mobile-feedback" viewBox="0 0 24 300" preserveAspectRatio="none" aria-hidden="true"><path class="return-track" d="M23 299H1V5H21m-5-4 5 4-5 4"/><path class="return-packet" d="M23 299H1V5H21" pathLength="100"/></svg>
+    <div class="learning-node model-node">${icon('model')}<h4>Coding agent</h4><span>Base model stays fixed</span></div>
+    <div class="flow-connector edit-connector" aria-hidden="true"><span>edits</span><svg viewBox="0 0 72 16"><path d="M0 8h69m-7-6 7 6-7 6"/><circle class="flow-packet" cx="4" cy="8" r="3"/></svg></div>
     <div class="learning-node policy-node">${icon('code')}<h4>Game agent</h4><span>Code, tools & notes evolve</span></div>
-    <div class="flow-connector" aria-hidden="true"><span>plays</span><svg viewBox="0 0 72 16"><path d="M0 8h69m-7-6 7 6-7 6"/></svg></div>
-    <div class="learning-node">${icon('pool')}<h4>Human opponents</h4><span>Frozen program pool</span></div>
+    <div class="flow-connector play-connector" aria-hidden="true"><span>plays</span><svg viewBox="0 0 72 16"><path d="M0 8h69m-7-6 7 6-7 6"/><circle class="flow-packet" cx="4" cy="8" r="3"/></svg></div>
+    <div class="learning-node pool-node">${icon('pool')}<h4>Human opponents</h4><span>Frozen program pool</span></div>
    </div>
-   <div class="feedback-return"><span>Feedback → next revision</span></div>
+   <div class="feedback-return"><svg viewBox="0 0 1000 40" preserveAspectRatio="none" aria-hidden="true"><path class="return-track" d="M999 0V31H1V0"/><path class="return-packet" d="M999 0V31H1V0" pathLength="100"/></svg><span>Feedback → next revision</span></div>
    <div class="feedback-paths">
     <div class="feedback-path"><strong>128<span>match units</span></strong><div><h4>Test chosen opponents</h4><span>Detailed replays</span></div><svg viewBox="0 0 70 32" aria-hidden="true"><path d="M1 16h66"/><path class="diagram-blue" d="m10 22 10-15 10 20 10-14 10 7 10-16"/></svg></div>
     <div class="feedback-path"><strong>16<span>full-pool calls</span></strong><div><h4>Evaluate the whole pool</h4><span>Elo & pool rank</span></div><svg viewBox="0 0 70 32" aria-hidden="true"><path d="M8 28h54"/><path class="diagram-blue" d="M16 27V17h10v10m4 0V4h10v23m4 0V12h10v15"/></svg></div>
@@ -155,7 +158,19 @@ function renderHome(){
  $('#main').innerHTML=`<section class="home-hero"><div class="home-title"><h1>AAArena<span>.</span></h1><p class="paper-title">${esc(window.ARENA.paper.title)}</p><div class="home-actions">${external(paper(),'Paper','btn primary')}<a class="btn" href="#/leaderboard">Leaderboard →</a></div></div></section>${window.ArenaReplay.markup()}<div class="home-content"><nav class="home-nav" aria-label="Research sections">${[['abstract','Abstract'],['results','Main results'],['ablations','Ablations']].map(([k,l])=>`<button data-home="${k}" class="${k===homeSection?'active':''}" aria-pressed="${k===homeSection}">${l}</button>`).join('')}</nav><div class="home-pane" id="home-pane"></div></div>`;
  window.ArenaReplay.mount($('#main'));renderHomePane();$$('[data-home]').forEach(b=>b.addEventListener('click',()=>{homeSection=b.dataset.home;$$('[data-home]').forEach(el=>{el.classList.toggle('active',el===b);el.setAttribute('aria-pressed',String(el===b));});renderHomePane();}));
 }
+let learningObserver;
+function mountLearningMotion(){
+ learningObserver?.disconnect();
+ const diagram=$('.learning-motion');
+ if(!diagram)return;
+ diagram.classList.toggle('motion-hidden',document.hidden);
+ learningObserver=new IntersectionObserver(entries=>{
+  diagram.classList.toggle('motion-visible',entries[0].isIntersecting);
+ },{threshold:.15});
+ learningObserver.observe(diagram);
+}
 function renderHomePane(){
+ learningObserver?.disconnect();
  const el=$('#home-pane');
  if(homeSection==='abstract')el.innerHTML=abstract();
  if(homeSection==='results'){el.innerHTML=`<div class="toolbar"><div class="section-intro"><h2>Main results</h2><p>Retained champions · 128 / 16 budget · Table 2</p></div>${segmented([['rank','Rank'],['elo','Elo']],metric,'data-metric','Result metric')}</div><div class="panel">${mainMatrix()}</div><p class="note">Median of 3 runs. Opus5.5 uses Claude Code; other models use Codex. Elo is comparable within a game, not across games.</p>`;bindMetrics(renderHomePane);}
@@ -165,7 +180,7 @@ function renderHomePane(){
  el.insertAdjacentHTML('beforeend',`<aside class="replay-learning-note" aria-labelledby="replay-learning-title"><h3 id="replay-learning-title">Learning from others’ games</h3><p>In a separate experiment, GLM-5.3 improved its policies by studying other players’ replays, while still receiving full-pool evaluation feedback. Compared with learning from its own games, both approaches reached #1 in Pacman; learning from others did better in Miracle but worse in AntWar.</p>${external(paper(15),'Replay-source experiment · Section 4.5')}</aside>`);
  $$('[data-ablation]').forEach(b=>b.addEventListener('click',()=>{ablation=b.dataset.ablation;renderHomePane();$(`[data-ablation="${ablation}"]`).focus();}));
  }
- localize();
+ localize();mountLearningMotion();
 }
 
 function renderContact(){
@@ -183,6 +198,7 @@ function bindDownloads(){
  });
 }
 function route(){
+ learningObserver?.disconnect();
  window.ArenaReplay.dispose();
  const parts=location.hash.replace(/^#\/?/,'').split('/');let page=parts[0]||'home';
  if(page==='results')page='leaderboard';
@@ -208,6 +224,9 @@ $$('[data-language]').forEach(button=>button.addEventListener('click',()=>{
  if(previewsPaused&&$('.replay-overview-toggle')?.getAttribute('aria-pressed')==='true')$('.replay-overview-toggle').click();
  window.scrollTo(0,scroll);button.focus({preventScroll:true});
 }));
-document.addEventListener('visibilitychange',()=>$('.ablation-scene')?.classList.toggle('ablation-suspended',document.hidden));
+document.addEventListener('visibilitychange',()=>{
+ $('.ablation-scene')?.classList.toggle('ablation-suspended',document.hidden);
+ $('.learning-motion')?.classList.toggle('motion-hidden',document.hidden);
+});
 window.addEventListener('hashchange',()=>{route();$('#main').focus({preventScroll:true});});route();
 })();

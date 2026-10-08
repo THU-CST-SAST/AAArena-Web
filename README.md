@@ -11,6 +11,10 @@ service, AgentBench, AHL-Arena, an API, or a database.
 ## Pages
 
 - Home: clickable real-match replay overview, visual abstract, main results, and animated ablation comparisons.
+  The abstract animates a twelve-second write → play → review → revise loop,
+  with a vertical return path on mobile. It illustrates the method, not measured
+  score gains; the model and archived opponents remain fixed. Animation pauses
+  offscreen/in hidden tabs and becomes static with reduced-motion preferences.
 - Leaderboard: twelve games × seven models, with human-pool rank and Elo; individual
   game tables and CSV export.
 - Games: twelve games, each with a leaderboard, detailed gameplay guide, and measured records.
