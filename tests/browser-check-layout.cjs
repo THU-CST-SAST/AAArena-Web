@@ -6,6 +6,12 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
  try{
   const page=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(target);
+  const paths=await page.locator('.brand-mark path').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('d')));
+  const fs=require('node:fs'),path=require('node:path');
+  for(const file of ['favicon.svg','assets/brand/aa-monogram.svg']){
+   const svg=fs.readFileSync(path.join(__dirname,'..',file),'utf8');
+   assert.deepEqual([...svg.matchAll(/<path d="([^"]+)"/g)].map(m=>m[1]),paths,'consistent selected A geometry: '+file);
+  }
   for(const lang of ['en','zh']){
    await page.locator(`[data-language="${lang}"]`).click();
    for(const width of [1440,1024,768,390,320]){

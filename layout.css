@@ -84,6 +84,7 @@ html[lang="zh-CN"] {
 }
 html[lang="zh-CN"] :is(h1,h2,h3,h4) { letter-spacing: 0; }
 .brand { font-weight: 650; }
+.brand-mark { width: 42px; height: 32px; }
 .header-inner { column-gap: 40px; }
 .site-header nav { gap: 28px; }
 .page-heading { padding: 44px 0 28px; }

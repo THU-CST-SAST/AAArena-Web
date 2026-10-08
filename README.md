@@ -30,6 +30,13 @@ service, AgentBench, AHL-Arena, an API, or a database.
 
 ## Local preview
 
+The selected double-A identity is in `assets/brand/aa-monogram.svg`, with matching
+header and favicon geometry. `assets/brand/aa-monogram-concept.png` preserves the
+selected built-in image-generation concept (A): a flat blue interlocking double-A
+monogram with balanced negative space, no enclosing hexagon, gradients or effects.
+Dorado uses enlarged screen-space unit/health markers over the complete recorded
+map; coordinates, game states and results are unchanged. Detail labels avoid overlap.
+
 The header offers English / Chinese switching. First visits default to English;
 an explicit selection is saved locally when browser storage is available.
 `i18n.js` translates interface copy, while `game-rules.zh.js` contains the Chinese

@@ -35,8 +35,9 @@
  }
  function draw(canvas,r,index){
   const f=r.frames[Math.min(r.frames.length-1,Math.floor(index))],c=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
-  const previous=painted.get(canvas);if(previous?.r===r&&previous?.f===f&&previous?.w===w&&previous?.h===h)return f;
-  painted.set(canvas,{r,f,w,h});
+  const displayWidth=r.game==='dorado'?Math.max(160,canvas.getBoundingClientRect().width):w;
+  const previous=painted.get(canvas);if(previous?.r===r&&previous?.f===f&&previous?.w===w&&previous?.h===h&&previous?.displayWidth===displayWidth)return f;
+  painted.set(canvas,{r,f,w,h,displayWidth});
   if(r.game==='antwar')return drawAntwar(canvas,r,f);
   c.fillStyle=INK;c.fillRect(0,0,w,h);
   const margin=canvas.closest('.replay-card')?12:26,unit=Math.min((w-margin*2)/r.width,(h-margin*2)/r.height),ox=(w-r.width*unit)/2,oy=(h-r.height*unit)/2;
@@ -62,6 +63,33 @@
    bg={board,aiSeat:r.aiSeat,layer};backgrounds.set(canvas,bg);
   }
   c.drawImage(bg.layer,0,0);
+  if(r.game==='dorado'){
+   // Keep recorded positions and the entire map; enlarge symbols in screen pixels.
+   // These markers are intentionally not physical unit footprints.
+   const scale=w/displayWidth,preview=Boolean(canvas.closest('.replay-card')),labels=[];
+   c.fillStyle='rgba(7,12,19,.20)';c.fillRect(ox,oy,r.width*unit,r.height*unit);
+   for(const item of f.items||[]){const [x,y]=pos(item.x,item.y),s=2.2*scale;c.save();c.translate(x,y);c.rotate(Math.PI/4);c.fillStyle='#e9deaa';c.strokeStyle=INK;c.lineWidth=scale;c.fillRect(-s,-s,s*2,s*2);c.strokeRect(-s,-s,s*2,s*2);c.restore();}
+   for(const u of [...f.units].sort((a,b)=>(a.owner<2)-(b.owner<2))){
+    const [x,y]=pos(u.x,u.y),owned=u.owner===0||u.owner===1,color=owned?team(u.owner):'#b7c1cf';
+    const radius=(u.kind==='base'?6.5:u.kind==='observer'?2.6:owned?(preview?4.4:5.5):3.2)*scale;
+    c.fillStyle=color;c.strokeStyle='#080d15';c.lineWidth=1.4*scale;c.beginPath();
+    if(u.kind==='base')c.rect(x-radius,y-radius,2*radius,2*radius);
+    else if(u.kind==='observer'){c.arc(x,y,radius,0,Math.PI*2);}
+    else {c.moveTo(x,y-radius);c.lineTo(x+radius,y);c.lineTo(x,y+radius);c.lineTo(x-radius,y);c.closePath();}
+    c.fill();c.stroke();
+    if(u.kind==='base'){c.strokeStyle='#fff';c.lineWidth=scale;c.strokeRect(x-radius*.45,y-radius*.45,radius*.9,radius*.9);}
+    if(owned&&u.maxHp>0){const bw=radius*2.5,bh=1.6*scale,yy=y-radius-3.5*scale;c.fillStyle='#080d15';c.fillRect(x-bw/2-scale,yy-scale,bw+2*scale,bh+2*scale);c.fillStyle=color;c.fillRect(x-bw/2,yy,bw*Math.max(0,Math.min(1,u.hp/u.maxHp)),bh);}
+    if(!preview&&owned&&u.kind!=='observer')labels.push({u,x,y,radius});
+   }
+   const occupied=[];
+   c.font=`600 ${10*scale}px system-ui`;c.textAlign='center';c.textBaseline='top';
+   for(const {u,x,y,radius} of labels){
+    const tw=c.measureText(u.name).width,yy=y+radius+3*scale,box={left:x-tw/2-2*scale,right:x+tw/2+2*scale,top:yy-2*scale,bottom:yy+12*scale};
+    if(box.left<0||box.right>w||box.bottom>h||occupied.some(b=>box.left<b.right&&box.right>b.left&&box.top<b.bottom&&box.bottom>b.top))continue;
+    occupied.push(box);c.lineWidth=3*scale;c.strokeStyle=INK;c.strokeText(u.name,x,yy);c.fillStyle='#fff';c.fillText(u.name,x,yy);
+   }
+   return f;
+  }
   for(const item of f.items||[]){const [x,y]=pos(item.x,item.y);c.fillStyle=item.owner===0||item.owner===1?team(item.owner):item.kind==='trap'?'#ff6b7f':'#e9deaa';c.save();c.translate(x,y);c.rotate(Math.PI/4);const size=Math.max(3,unit*(item.kind==='mine'?.31:.18));c.fillRect(-size,-size,size*2,size*2);c.restore();}
   for(const u of f.units||[]){
    const [x,y]=pos(u.x,u.y),color=u.owner===0||u.owner===1?team(u.owner):'#d6dce5';
@@ -100,11 +128,19 @@
    seats.querySelectorAll('button').forEach((b,s)=>b.onclick=()=>{show(base,s);dialog.querySelectorAll('.replay-seat-picker button')[s].focus();});
    dialog.querySelector('aside').prepend(seats);
    const note=document.createElement('p');note.className='replay-render-note';note.textContent=text('Full-information replay · simplified 2D view','完整视野回放 · 二维简化呈现');dialog.querySelector('aside').append(note);
+   if(r.game==='dorado')note.textContent+=' · '+text('Enlarged unit markers; positions unchanged','单位标记已放大，位置保持不变');
    if(!dialog.open)dialog.showModal();document.body.classList.add('replay-modal-open');paintModal();
   }
   const sizePreviews=()=>cards.forEach(card=>{const canvas=card.node.querySelector('canvas');canvas.width=600;canvas.height=600;canvas.style.aspectRatio='1';painted.delete(canvas);card.drawn=-1;paintCard(card);});
   cards.forEach(card=>{const hint=document.createElement('p');hint.className='replay-card-goal';hint.textContent=text(...goals[card.r.game]);card.node.querySelector('canvas').before(hint);card.node.onclick=()=>show(card.r);});
   sizePreviews();
+  const resize=new ResizeObserver(()=>{
+   const card=cards.find(c=>c.r.game==='dorado');
+   if(card){card.drawn=-1;paintCard(card);}
+   if(open?.game==='dorado')paintModal();
+  });
+  const doradoCanvas=root.querySelector('[data-replay="dorado"] canvas');
+  if(doradoCanvas)resize.observe(doradoCanvas);resize.observe(dialog.querySelector('canvas'));
   const close=()=>dialog.close();dialog.querySelector('.replay-close').onclick=close;
   dialog.addEventListener('close',()=>{open=null;modalPlaying=false;document.body.classList.remove('replay-modal-open');});
   dialog.querySelector('aside').addEventListener('click',e=>{if(e.target.closest('a[href^="#/"]'))close();});
@@ -115,7 +151,7 @@
   let visible=true;const observer=new IntersectionObserver(v=>{visible=v[0].isIntersecting;});observer.observe(root.querySelector('.replay-showcase'));
   const frame=now=>{const dt=Math.min((now-last)/1000,.1);last=now;if(!document.hidden){if(open&&modalPlaying){position=Math.min(open.frames.length-1,position+dt*open.fps*speed);if(position>=open.frames.length-1)modalPlaying=false;paintModal();}else if(!open&&visible&&playing){cards.forEach(card=>{card.position=(card.position+dt*card.r.fps)%card.r.frames.length;paintCard(card);});}}id=requestAnimationFrame(frame);};
   id=requestAnimationFrame(frame);
-  dispose=()=>{cancelAnimationFrame(id);observer.disconnect();if(dialog.open)dialog.close();document.body.classList.remove('replay-modal-open');};
+  dispose=()=>{cancelAnimationFrame(id);observer.disconnect();resize.disconnect();if(dialog.open)dialog.close();document.body.classList.remove('replay-modal-open');};
  }
  window.ArenaReplay={markup,mount,draw,dispose:()=>dispose()};
 })();
