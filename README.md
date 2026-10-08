@@ -12,7 +12,12 @@ service, AgentBench, AHL-Arena, an API, or a database.
 
 - Home: clickable real-match replay overview, visual abstract, main results, and animated ablation comparisons.
   The replay gallery keeps only the heading, team colors, game/model names and
-  live scores. Method explanation stays in the abstract; provenance stays in match details.
+  labeled territory/points or two base-health bars. Travel headings follow recorded
+  movement (snake heads use the neck); stationary units retain their last heading,
+  and unknown initial directions are not guessed. These are travel directions,
+  not inferred attack targets. Terminal overlays use the recorded referee winner,
+  including ties, and previews hold the result for four seconds before looping.
+  Method explanation stays in the abstract; provenance stays in match details.
   Scoring methods, metric definitions and ablation caveats are collapsed by default;
   charts retain necessary labels and results without repeating visual instructions.
   The abstract animates a twelve-second, three-step develop → play → review loop,

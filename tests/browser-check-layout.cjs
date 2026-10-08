@@ -23,7 +23,8 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
     assert.ok(Math.abs(gallery[1].x-gallery[0].x-gallery[0].width)<=11,'tight gallery gutters');
     if(width>1100)assert.ok(gallery.every(b=>Math.abs(b.y-gallery[0].y)<1),'one balanced desktop row');
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`replay overflow ${lang} ${width}`);
-    assert.ok(await page.locator('.replay-card-score').evaluateAll(nodes=>nodes.every(e=>e.scrollWidth<=e.clientWidth+1)),`replay scores must not be clipped ${lang} ${width}`);
+    assert.equal(await page.locator('.replay-card .replay-hud').count(),4);
+    assert.ok(await page.locator('.replay-card .replay-hud').evaluateAll(nodes=>nodes.every(e=>e.scrollWidth<=e.clientWidth+1)),`replay HUD must not be clipped ${lang} ${width}`);
     const rankChecks=await page.locator('.rank-tile').evaluateAll(tiles=>tiles.map(tile=>{
      const box=tile.getBoundingClientRect(), rank=tile.querySelector('strong').getBoundingClientRect();
      const children=[...tile.children].map(e=>e.getBoundingClientRect());

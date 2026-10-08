@@ -10,7 +10,9 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
   const errors=[];p.on('pageerror',e=>errors.push(e.message));await p.goto(target);
   assert.equal(await p.locator('.replay-card').count(),4);
   assert.equal(await p.locator('.replay-intro p,.replay-disclosure,.replay-card-goal').count(),0,'no explanatory microcopy in replay gallery');
-  assert.deepEqual(await p.locator('.replay-open').allTextContents(),['↗','↗','↗','↗']);
+  assert.equal(await p.locator('.replay-card-score,.replay-card-foot').count(),0);
+  assert.deepEqual(await p.locator('.replay-card .replay-hud-title').allTextContents(),['Territory points','Points','Base HP','Base HP']);
+  assert.equal(await p.locator('.replay-card [role="meter"]').count(),4);
   assert.equal(await p.locator('#hero-motion,[data-motion-kind]').count(),0);
   const pixels=()=>p.locator('.replay-card canvas').first().evaluate(c=>c.toDataURL());
   const start=await pixels();await p.waitForTimeout(450);assert.notEqual(await pixels(),start);
@@ -26,10 +28,15 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
     await p.getByRole('button',{name:'Pause',exact:true}).click();
     await p.getByLabel('Playback speed').selectOption('4');
     const seek=p.getByRole('slider',{name:'Replay progress'});await seek.focus();await p.keyboard.press('End');
-    const expected=await p.evaluate(({game,seat})=>{const r=ARENA_REPLAYS[game].variants[seat];return {ai:r.finalScores[seat],human:r.finalScores[1-seat],winner:r.winner===seat?'AI wins':'Human wins',raw:r.rawReplay};},{game,seat});
+    const expected=await p.evaluate(({game,seat})=>{const r=ARENA_REPLAYS[game].variants[seat];return {ai:r.finalScores[seat],human:r.finalScores[1-seat],winner:r.winner===null?'Draw':r.winner===seat?'AI wins':'Human wins',raw:r.rawReplay};},{game,seat});
     assert.equal(await p.locator('[data-ai-score]').textContent(),String(expected.ai));
     assert.equal(await p.locator('[data-human-score]').textContent(),String(expected.human));
     assert.equal(await p.locator('.replay-live-label').textContent(),'Final score');
+    assert.equal(await p.locator('.replay-dialog .replay-outcome').innerText(),expected.winner);
+    assert.ok(await p.locator('.replay-dialog .replay-outcome').isVisible());
+    if(['antwar','dorado'].includes(game)){
+     assert.deepEqual(await p.locator('.replay-modal-hud [role="meter"]').evaluateAll(nodes=>nodes.map(n=>Number(n.getAttribute('aria-valuenow')))),[expected.ai,expected.human]);
+    }
     await p.getByText('Result & match details',{exact:true}).click();
     assert.ok((await p.locator('.replay-match-details').textContent()).includes(expected.winner));
     await p.screenshot({path:`/tmp/aa-replay-${game}-seat${seat}.png`});
@@ -41,6 +48,8 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
     const bytes=await fs.readFile(await dl.path());
     assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),proof.matches[seat].raw_sha256);
     assert.equal(proof.matches[seat].terminal_verified,true);
+    await seek.focus();await p.keyboard.press('Home');
+    assert.equal(await p.locator('.replay-dialog .replay-outcome').isVisible(),false,'seeking back clears result');
    }
    await p.keyboard.press('Escape');assert.equal(await p.locator('dialog[open]').count(),0);
    assert.equal(await p.evaluate(()=>document.activeElement.dataset.replay),game);
@@ -79,6 +88,17 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
   assert.equal(await quietPixels(),still);
   await quiet.getByRole('button',{name:'Watch SnakeGo replay'}).click();await quiet.getByRole('button',{name:'Play',exact:true}).click();
   await quiet.getByRole('button',{name:'Pause',exact:true}).waitFor();await quiet.close();
+  // Accelerated preview clock fixture: retain all real frames and referee winners.
+  const fast=await browser.newPage({viewport:{width:1440,height:1000}});await fast.goto(target);
+  await fast.evaluate(()=>{for(const r of Object.values(ARENA_REPLAYS))r.fps=100000;});
+  await fast.waitForFunction(()=>[...document.querySelectorAll('.replay-card .replay-outcome')].every(n=>!n.hidden));
+  const winners=await fast.evaluate(()=>['snakego','pacman','antwar','dorado'].map(g=>{const r=ARENA_REPLAYS[g];return r.winner===null?'Draw':r.winner===r.aiSeat?'AI wins':'Human wins';}));
+  assert.deepEqual(await fast.locator('.replay-card .replay-outcome').allTextContents(),winners);
+  await fast.waitForTimeout(1100);
+  assert.equal(await fast.locator('.replay-card .replay-outcome:visible').count(),4,'terminal result is held, not flashed');
+  await fast.getByRole('button',{name:'Pause previews',exact:true}).click();
+  await fast.screenshot({path:'/tmp/aa-replay-preview-results.png'});
+  await fast.close();
   assert.deepEqual(errors,[]);console.log('PASS: real replay overview, 8 matches, seeking, seat switch, verified downloads, English/Chinese, focus, mobile, reduced motion');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exit(1)});

@@ -297,6 +297,26 @@ html[lang="zh-CN"] :is(h1,h2,h3,h4) { letter-spacing: 0; }
 .replay-card canvas { aspect-ratio: 1; }
 .replay-card-head { padding: 14px; min-height: 52px; }
 .replay-card-head h3 { font-size: 18px; }
+.replay-viewport { position: relative; min-width: 0; }
+.replay-outcome { position: absolute; inset: auto 8% 10%; padding: 16px 8px; background: rgba(8,12,19,.94); border: 1px solid #667085; border-bottom: 4px solid #abb5c4; text-align: center; color: #fff; font-size: clamp(18px,2vw,30px); font-weight: 650; box-shadow: 0 4px 24px #0006; }
+.replay-outcome[data-winner="ai"] { border-bottom-color: #3975ff; }
+.replay-outcome[data-winner="human"] { border-bottom-color: #f2b85b; }
+.replay-outcome[hidden] { display: none; }
+.replay-hud { background: #101318; color: #f1f3f6; border-top: 1px solid #29303b; padding: 12px 14px 16px; min-height: 118px; }
+.replay-hud-title { color: #bdc7d5; font-size: 13px; margin-bottom: 10px; }
+.replay-hud-teams { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.replay-hud-value { display: flex; flex-direction: column; gap: 2px; }
+.replay-hud-value span { font-size: 12px; color: #bdc7d5; }
+.replay-hud-value strong { color: var(--team); font-size: 26px; line-height: 1.2; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.replay-hud-health .replay-hud-teams { grid-template-columns: 1fr; gap: 9px; }
+.replay-hud-health .replay-hud-value { flex-direction: row; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+.replay-hud-health .replay-hud-value strong { font-size: 14px; }
+.replay-health-track { height: 12px; background: #303947; overflow: hidden; }
+.replay-health-track i { display: block; height: 100%; background: var(--team); }
+.replay-modal-hud .replay-hud { padding: 16px 20px; }
+.replay-modal-hud .replay-hud-health .replay-hud-teams { grid-template-columns: 1fr 1fr; gap: 24px; }
+.replay-modal-hud .replay-health-track { height: 18px; }
+.replay-modal-hud .replay-hud { min-height: 0; }
 .replay-card-foot { padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap; gap: 8px; min-height: 44px; margin-top: auto; }
 .replay-card-score { display: flex; flex-wrap: wrap; gap: 2px 10px; }
 .replay-card-score>span { white-space: nowrap; }
@@ -310,6 +330,14 @@ html[lang="zh-CN"] :is(h1,h2,h3,h4) { letter-spacing: 0; }
  .replay-grid { gap: 6px; }
  .replay-card-head { display: block; padding: 10px 9px; min-height: 60px; }
  .replay-card-head h3 { font-size: 16px; }
+ .replay-hud { padding: 10px 9px 12px; min-height: 112px; }
+ .replay-hud-title { font-size: 12px; margin-bottom: 8px; }
+ .replay-hud-value strong { font-size: 23px; }
+ .replay-hud-health .replay-hud-value strong { font-size: 11px; }
+ .replay-hud-value span { font-size: 11px; }
+ .replay-modal-hud .replay-hud { padding: 12px; }
+ .replay-modal-hud .replay-hud-teams { gap: 12px; }
+ .replay-outcome { font-size: 18px; padding: 12px 4px; }
  .replay-card-foot { padding: 8px 9px; min-height: 54px; font-size: 11px; }
  .replay-card-foot .replay-open { display: none; }
 }

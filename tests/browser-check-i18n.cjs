@@ -59,6 +59,7 @@ const assert=require('node:assert/strict');
   assert.equal(await page.locator('#board-game').inputValue(),'pacman');
   await language('zh').click();
   await nav.getByRole('link',{name:'游戏',exact:true}).click();
+  await page.locator('.game-card').first().waitFor();
   assert.equal(await page.locator('[data-filter],.filter-chips,.category').count(),0);
   assert.equal(await page.locator('.game-card').count(),12);
   await page.screenshot({path:'/tmp/aa-games-no-categories.png'});
