@@ -11,6 +11,10 @@ service, AgentBench, AHL-Arena, an API, or a database.
 ## Pages
 
 - Home: clickable real-match replay overview, visual abstract, main results, and animated ablation comparisons.
+  The replay gallery keeps only the heading, team colors, game/model names and
+  live scores. Method explanation stays in the abstract; provenance stays in match details.
+  Scoring methods, metric definitions and ablation caveats are collapsed by default;
+  charts retain necessary labels and results without repeating visual instructions.
   The abstract animates a twelve-second, three-step develop → play → review loop,
   returning directly to writing/revising the policy after feedback,
   with a vertical return path on mobile. It illustrates the method, not measured

@@ -23,6 +23,8 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
     assert.equal(await cells.nth(model).locator('.pool-result-elo').innerText(),elo.toFixed(1)+' Elo');
    }
   }
+  assert.equal(await p.locator('.foot-row .note').count(),0);
+  assert.equal(await p.locator('.source-details').evaluate(el=>el.open),false);
   await p.getByText('Scoring & data source',{exact:true}).click();
   assert.match(await p.locator('.source-details').innerText(),/median of three runs/);
   await nav.getByRole('link',{name:'Home',exact:true}).click();
@@ -35,6 +37,9 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
   await p.getByRole('button',{name:'Ablations',exact:true}).click();
   for(const name of ['Replay feedback','Opponents','Batch size']){
    await p.getByRole('button',{name,exact:true}).click();
+   assert.equal(await p.locator('#home-pane > .note').count(),0);
+   assert.equal(await p.locator('.ablation-raw').evaluate(el=>el.open),false);
+   assert.match(await p.locator('.ablation-raw').textContent(),/Separate ablation settings/);
    for(const format of ['GIF','MP4']){
     const [download]=await Promise.all([p.waitForEvent('download'),p.locator('.ablation-motion-controls').getByRole('link',{name:format+' ↓',exact:true}).click()]);
     assert.equal(await download.failure(),null);
@@ -42,6 +47,9 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
    }
   }
   await nav.getByRole('link',{name:'Games',exact:true}).click();
+  assert.equal(await p.locator('#main > .note').count(),0);
+  await p.getByText('About these metrics',{exact:true}).click();
+  assert.match(await p.locator('.source-details').innerText(),/not unique players/);
   await p.getByRole('link',{name:'AntWar2 details',exact:true}).click();
   await p.getByRole('navigation',{name:'Game details'}).getByRole('link',{name:'Overview',exact:true}).click();
   await p.getByText('Sources & scope',{exact:true}).click();

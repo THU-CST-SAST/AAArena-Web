@@ -4,6 +4,10 @@
  let language='en';
  try { if(localStorage.getItem('aaarena-language')==='zh')language='zh'; } catch {}
  const words = new Map(Object.entries({
+  'About these metrics':'指标说明',
+  'Median of 3 runs · Table 2':'3 次实验的中位数 · 表 2',
+  'Median of 3 runs · 128 / 16':'3 次实验的中位数 · 128 / 16 预算',
+  'Games and human-written programs from the Tsinghua Agent Competition.':'游戏及人类选手程序来自历届清华大学智能体大赛。',
   'Median of 3 runs · Retained best · Table 2':'各次实验保留最佳策略，取 3 次结果的中位数 · 表 2',
   'Best pool rank':'最好池内排名','Highest Elo':'最高 Elo',
   'Model comparison · Elo':'模型表现对比 · Elo',

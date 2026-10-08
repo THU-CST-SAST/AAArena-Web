@@ -9,6 +9,8 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
   const p=await browser.newPage({viewport:{width:1440,height:1000},acceptDownloads:true});
   const errors=[];p.on('pageerror',e=>errors.push(e.message));await p.goto(target);
   assert.equal(await p.locator('.replay-card').count(),4);
+  assert.equal(await p.locator('.replay-intro p,.replay-disclosure,.replay-card-goal').count(),0,'no explanatory microcopy in replay gallery');
+  assert.deepEqual(await p.locator('.replay-open').allTextContents(),['↗','↗','↗','↗']);
   assert.equal(await p.locator('#hero-motion,[data-motion-kind]').count(),0);
   const pixels=()=>p.locator('.replay-card canvas').first().evaluate(c=>c.toDataURL());
   const start=await pixels();await p.waitForTimeout(450);assert.notEqual(await pixels(),start);
