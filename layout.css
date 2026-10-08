@@ -1,4 +1,7 @@
 /* Shared visual rhythm. Keep component sizes here instead of one-off page tweaks. */
+.paper-pending:disabled { color: #92969d; opacity: 1; cursor: not-allowed; text-decoration: none; }
+.paper-pending.btn, .paper-pending.btn:hover { background: #f0f1f3; border-color: #dcdfe3; color: #92969d; }
+.paper-pending.inline-link { padding: 0; font: inherit; text-align: left; }
 /* Records lead with outcomes; exact tables remain available on demand. */
 .record-budget { white-space: nowrap; color: var(--muted); font-size: 14px; }
 .record-outcome { display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px; padding: 26px; border-bottom: 1px solid var(--line); }

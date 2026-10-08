@@ -157,7 +157,12 @@ Data are transcribed from the supplied manuscript, not a live tournament feed:
   the detailed figure is rendered directly from the supplied PDF, not estimated.
 
 Current manuscript: `Can_AI_Agent_Build_Game_Agent.pdf` (supplied 2026-10-07),
-served unchanged at `assets/aa-arena.pdf`. Its title is “Can AI Agents Build Game
+retained unchanged at `assets/aa-arena.pdf` as a data-verification snapshot (the file
+is still publicly accessible, but no longer linked from the UI). All paper controls
+are disabled until `window.ARENA.paper.arxivUrl` in `data.js` is set to the published
+arXiv abstract URL. Setting that one field enables the header, hero and contextual
+paper references together; no old PDF page anchors are carried over.
+Its title is “Can AI Agents Build Game
 Agents for Real-World Adversarial Games?” The new version names Hongning Wang as
 the corresponding author. His contact email and profile are verified against
 [Tsinghua's faculty page](https://www.cs.tsinghua.edu.cn/csen/info/1313/4406.htm).

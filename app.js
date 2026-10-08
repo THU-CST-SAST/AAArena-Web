@@ -9,8 +9,8 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const fmt=n=>n.toLocaleString('en-US'), slug=g=>g.name.toLowerCase();
 let boardGame='all', metric='rank', homeSection='abstract', gameOrder='ast', query='', ablation='feedback';
 const ablationReferences={feedback:1,opponents:0,batch:2,learning:0};
-const paper=(page=1)=>`assets/aa-arena.pdf?v=20261007#page=${page}`;
-const external=(url,text,cls='inline-link')=>`<a class="${cls}" href="${url}" target="_blank" rel="noopener">${text} ↗</a>`;
+const paper=()=>window.ARENA.paper.arxivUrl;
+const external=(url,text,cls='inline-link')=>url?`<a class="${cls}" href="${url}" target="_blank" rel="noopener">${text} ↗</a>`:`<button type="button" class="${cls} paper-pending" disabled title="Awaiting arXiv publication">${text}</button>`;
 const model=i=>`<span class="model-cell"><span class="model-name">${models[i]}</span></span>`;
 function segmented(items,current,attr,label){return `<div class="segmented" role="group" aria-label="${label}">${items.map(([key,name])=>`<button ${attr}="${key}" class="${key===current?'active':''}" aria-pressed="${key===current}">${name}</button>`).join('')}</div>`;}
 function heading(title){return `<div class="page-heading"><h1>${title}</h1></div>`;}
@@ -162,7 +162,7 @@ function ablationComparison(key){
  }).join('')}</div>`;
 }
 function renderHome(){
- $('#main').innerHTML=`<section class="home-hero"><div class="home-title"><h1>AAArena<span>.</span></h1><p class="paper-title">${esc(window.ARENA.paper.title)}</p><div class="home-actions">${external(paper(),'Paper','btn primary')}<a class="btn" href="#/leaderboard">Leaderboard →</a></div></div></section>${window.ArenaReplay.markup()}<div class="home-content"><nav class="home-nav" aria-label="Research sections">${[['abstract','Abstract'],['results','Main results'],['ablations','Ablations']].map(([k,l])=>`<button data-home="${k}" class="${k===homeSection?'active':''}" aria-pressed="${k===homeSection}">${l}</button>`).join('')}</nav><div class="home-pane" id="home-pane"></div></div>`;
+ $('#main').innerHTML=`<section class="home-hero"><div class="home-title"><h1>AAArena<span>.</span></h1><p class="paper-title">${esc(window.ARENA.paper.title)}</p><div class="home-actions">${external(paper(),'arXiv','btn primary')}<a class="btn" href="#/leaderboard">Leaderboard →</a></div></div></section>${window.ArenaReplay.markup()}<div class="home-content"><nav class="home-nav" aria-label="Research sections">${[['abstract','Abstract'],['results','Main results'],['ablations','Ablations']].map(([k,l])=>`<button data-home="${k}" class="${k===homeSection?'active':''}" aria-pressed="${k===homeSection}">${l}</button>`).join('')}</nav><div class="home-pane" id="home-pane"></div></div>`;
  window.ArenaReplay.mount($('#main'));renderHomePane();$$('[data-home]').forEach(b=>b.addEventListener('click',()=>{homeSection=b.dataset.home;$$('[data-home]').forEach(el=>{el.classList.toggle('active',el===b);el.setAttribute('aria-pressed',String(el===b));});renderHomePane();}));
 }
 let learningObserver;
@@ -235,5 +235,6 @@ document.addEventListener('visibilitychange',()=>{
  $('.ablation-scene')?.classList.toggle('ablation-suspended',document.hidden);
  $('.learning-motion')?.classList.toggle('motion-hidden',document.hidden);
 });
+$('.header-tools .paper-link').outerHTML=external(paper(),'arXiv','paper-link');
 window.addEventListener('hashchange',()=>{route();$('#main').focus({preventScroll:true});});route();
 })();

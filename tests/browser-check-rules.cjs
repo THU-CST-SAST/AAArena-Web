@@ -26,7 +26,7 @@ const assert=require('node:assert/strict');
    assert.ok(await page.locator('.rules-section h3').last().evaluate(el=>el.getBoundingClientRect().top>=80));
    await page.getByText('Sources & scope',{exact:true}).click();
    assert.ok(await page.locator('.rules-sources li').count()>0);
-   assert.match(await page.getByRole('link',{name:'Paper summary in Appendix A ↗',exact:true}).getAttribute('href'),/#page=2[12]$/);
+   assert.ok(await page.getByRole('button',{name:'Paper summary in Appendix A',exact:true}).isDisabled());
    if(name==='Pacman'){
     await page.evaluate(()=>window.scrollTo(0,0));
     await page.screenshot({path:'/tmp/aa-rules-pacman-desktop.png'});

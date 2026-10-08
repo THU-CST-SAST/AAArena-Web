@@ -1,6 +1,7 @@
 /* Transcribed from Can_AI_Agent_Build_Game_Agent.pdf, Tables 1–4, 6–9 and Figure 13. Static paper snapshot. */
 window.ARENA = {
  paper: {
+  arxivUrl: null, // Set the published https://arxiv.org/abs/... URL to enable all paper links.
   sha256: "68abbc69fdb0582ea2fb86f69a1f1c569a621747e3fbcc5fa21989f7bf48b879",
   title: "Can AI Agents Build Game Agents for Real-World Adversarial Games?",
   abstract: "AI for adversarial games has progressed from heuristic search to reinforcement learning, yet adapting efficiently to diverse opponents remains challenging. Building on heuristic learning (HL), we formalize Adversarial Heuristic Learning (AHL), a framework in which an AI agent improves executable policies and supporting software through game feedback while its base model’s weights remain fixed. We introduce AAArena, comprising 12 real-world competition games and archived human programs, to evaluate policy development under separate match and full-pool evaluation budgets. Our evaluation of 7 AI models shows that, while Opus5.5 with Claude Code earns 6 gold medals, no evaluated model reaches first place in the other 6 frozen human ladders. Case studies and trajectory analyses reveal persistent difficulties in understanding complex rules, implementing effective strategies, and planning long-term policy improvement. Further experiments show that agents can improve their policies using both on-policy and off-policy replays, with dense feedback yielding better performance than binary feedback.",
