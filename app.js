@@ -4,6 +4,7 @@ const {games,models,harnesses,mainOrder,milestones,continuation,ablations,replay
 const mainGames=mainOrder.map(name=>games.find(g=>g.name===name));
 const learningComparison={labels:['On-policy','Off-policy'],rows:replayLearning.map(([name,on,off])=>[name,[on[0],off[0]]]),ranks:Object.fromEntries(replayLearning.map(([name,on,off])=>[name,[on[1],off[1]]]))};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const i18n=window.ArenaI18n,t=value=>i18n.t(value),localize=()=>i18n.apply();
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt=n=>n.toLocaleString('en-US'), slug=g=>g.name.toLowerCase();
 let boardGame='all', metric='rank', homeSection='abstract', gameFilter='All', gameOrder='ast', query='', ablation='feedback';
@@ -47,7 +48,7 @@ function renderLeaderboard(){
  const g=games.find(g=>slug(g)===boardGame);
  $('#main').innerHTML=heading('Leaderboard')+`<div class="toolbar"><label class="select-wrap">Game <select id="board-game" aria-label="Game"><option value="all">All games</option>${games.map(g=>`<option value="${slug(g)}" ${slug(g)===boardGame?'selected':''}>${g.name}</option>`).join('')}</select></label><button class="btn" data-download="${g?slug(g):'all'}">Export CSV ↓</button></div><div class="panel"><div class="panel-head"><div><h2>${g?g.name:'Results across 12 games'}</h2><p>${g?`${g.pool} human programs · Sorted by Elo`:'Human-pool rank · Elo below'}</p></div>${!g?'<span class="pool-matrix-key"><i aria-hidden="true"></i>Highest Elo in game</span>':''}</div>${g?gameLeaderboard(g):mainMatrix(true)}</div><div class="foot-row"><p class="note">${g?'Ranks are measured against the human pool. Each model is evaluated independently.':'Table 2 · Median of 3 runs · 128 / 16 budget. Opus5.5: Claude Code; other models: Codex.'}</p>${g?`<a class="inline-link" href="#/games/${slug(g)}">Game details →</a>`:''}</div>${sourceDetails()}`;
  $('#board-game').addEventListener('change',e=>{boardGame=e.target.value;renderLeaderboard();$('#board-game').focus();});
- bindDownloads();
+ bindDownloads();localize();
 }
 function renderGames(){
  $('#main').innerHTML=heading('Games','12 competition games. Rules, results and evaluation records.')+`<div class="toolbar"><label class="search"><span class="sr-only">Search games</span><svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="5"/><path d="m12 12 5 5"/></svg><input id="game-search" type="search" placeholder="Search games" value="${esc(query)}"></label><label class="select-wrap">Sort by <select id="game-sort" aria-label="Sort by">${[['ast','Rule complexity ↑'],['pool','Pool size ↓'],['name','Name A–Z']].map(([k,v])=>`<option value="${k}" ${gameOrder===k?'selected':''}>${v}</option>`).join('')}</select></label></div><div class="toolbar"><div class="filter-chips" role="group" aria-label="Game category">${['All','Tactics','Economy','Territory','Defence','Maze','Survival'].map(c=>`<button class="chip ${c===gameFilter?'active':''}" data-filter="${c}" aria-pressed="${c===gameFilter}">${c==='All'?'All games':c}</button>`).join('')}</div><span id="game-count" class="panel-meta" role="status"></span></div><div id="game-grid" class="game-grid"></div><p class="note">Pool sizes count programs, not unique players. AST measures rule-description size, not optimal-play difficulty.</p>`;
@@ -55,10 +56,11 @@ function renderGames(){
  $$('[data-filter]').forEach(b=>b.addEventListener('click',()=>{gameFilter=b.dataset.filter;$$('[data-filter]').forEach(el=>{el.classList.toggle('active',el===b);el.setAttribute('aria-pressed',String(el===b));});renderCards();}));
 }
 function renderCards(){
- const list=games.filter(g=>(gameFilter==='All'||g.category===gameFilter)&&(g.name+' '+g.description).toLowerCase().includes(query.trim().toLowerCase())).sort((a,b)=>gameOrder==='ast'?a.ast-b.ast:gameOrder==='pool'?b.pool-a.pool:a.name.localeCompare(b.name));
+ const list=games.filter(g=>(gameFilter==='All'||g.category===gameFilter)&&(g.name+' '+g.description+' '+t(g.description)).toLowerCase().includes(query.trim().toLowerCase())).sort((a,b)=>gameOrder==='ast'?a.ast-b.ast:gameOrder==='pool'?b.pool-a.pool:a.name.localeCompare(b.name));
  $('#game-count').textContent=`${list.length} / 12 games`;
  $('#game-grid').innerHTML=list.map(g=>`<a class="game-card" href="#/games/${slug(g)}" aria-label="${g.name} details"><div class="game-card-top">${symbol(g)}<span class="category">${g.category}</span></div><div class="game-card-body"><h2>${g.name}</h2><p>${g.description}</p></div><div class="game-card-bottom"><span><strong>${g.pool}</strong> programs</span><span><strong>${fmt(g.ast)}</strong> AST</span><span class="card-arrow" aria-hidden="true">↗</span></div></a>`).join('')||'<div class="empty"><h2>No matching games</h2><p>Try another name or clear the filters.</p><button class="btn" id="clear-search">Clear filters</button></div>';
  $('#clear-search')?.addEventListener('click',()=>{query='';gameFilter='All';renderGames();$('#game-search').focus();});
+ localize();
 }
 function gameSidebar(g){return `<aside class="side-panel"><h2>Game data</h2><dl class="facts">${[['Human programs',fmt(g.pool)],['Rule AST nodes',fmt(g.ast)],['Rule atoms',fmt(g.ra)],['Evaluated models',String(models.length)],['Small-match budget','128'],['Full-pool budget','16']].map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>${external(paper(window.GAME_DETAILS[g.name].page),'Paper summary','btn')}<button class="btn" data-download="${slug(g)}">Export results ↓</button></aside>`;}
 function records(g){
@@ -73,7 +75,7 @@ function records(g){
  return html;
 }
 function gameRules(g){
- const r=window.GAME_RULES[g.name],sectionId=i=>`rule-${slug(g)}-${i}`;
+ const r=(i18n.language==='zh'?window.GAME_RULES_ZH:window.GAME_RULES)[g.name],sectionId=i=>`rule-${slug(g)}-${i}`;
  return `<article class="article rulebook"><h2>How it plays</h2><p class="rules-intro">${esc(r.intro)}</p><dl class="rules-facts">${r.facts.map(([label,value])=>`<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl><nav class="rules-contents" aria-label="Rule chapters">${r.sections.map((s,i)=>`<button type="button" data-rule-section="${sectionId(i)}"><span>${String(i+1).padStart(2,'0')}</span>${esc(s.title)}</button>`).join('')}</nav>${r.sections.map((s,i)=>`<section class="rules-section" aria-labelledby="${sectionId(i)}"><h3 id="${sectionId(i)}" tabindex="-1"><span>${String(i+1).padStart(2,'0')}</span>${esc(s.title)}</h3>${s.steps?`<ol>${s.steps.map(t=>`<li>${esc(t)}</li>`).join('')}</ol>`:''}${s.table?table(s.table.headers,s.table.rows.map(row=>`<tr>${row.map((cell,j)=>j===0?`<th scope="row">${esc(cell)}</th>`:`<td>${esc(cell)}</td>`).join('')}</tr>`).join(''),'rules-table',g.name+': '+s.title):''}${(s.paragraphs||[]).map(t=>`<p>${esc(t)}</p>`).join('')}</section>`).join('')}<details class="rules-sources"><summary>Sources & scope</summary><p>Gameplay summary compiled from the competition material and bundled Arena backend. This is not a verbatim historical manual; match configuration can change defaults.</p><ul>${r.sources.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>${external(paper(window.GAME_DETAILS[g.name].page),'Paper summary in Appendix A')}</details></article>`;
 }
 function renderDetail(g,tab){
@@ -124,7 +126,7 @@ function ablationComparison(key){
  <div class="ablation-comparisons">${a.rows.map(([name,values])=>{
   const best=Math.max(...values),base=values[baseline],height=values.length*73+42;
   const x=v=>16+v/max*288;
-  const description=values.map((value,i)=>`${a.labels[i]}: Elo ${value.toFixed(1)}, ${i===baseline?'reference':`change ${delta(value-base)} from ${a.labels[baseline]}`}`).join('; ');
+  const description=values.map((value,i)=>i18n.language==='zh'?`${t(a.labels[i])}：Elo ${value.toFixed(1)}，${i===baseline?'参照组':`相对${t(a.labels[baseline])}变化 ${delta(value-base)}`}`:`${a.labels[i]}: Elo ${value.toFixed(1)}, ${i===baseline?'reference':`change ${delta(value-base)} from ${a.labels[baseline]}`}`).join('; ');
   return `<figure class="ablation-comparison"><figcaption><a href="#/games/${name.toLowerCase()}/records">${name} ↗</a><span>Elo</span></figcaption><svg viewBox="0 0 320 ${height}" role="img" aria-labelledby="ablation-${key}-${name}-title"><title id="ablation-${key}-${name}-title">${esc(name+': '+description)}</title>${values.map((value,i)=>{
    const y=23+i*73,diff=value-base;
    return `<g class="ablation-condition ${value===best?'condition-best':''}" data-condition="${esc(a.labels[i])}" data-elo="${value.toFixed(1)}" data-delta="${diff.toFixed(1)}"><text class="condition-label" x="16" y="${y}">${esc(a.labels[i])}</text><text class="condition-elo" x="304" y="${y}" text-anchor="end">${value.toFixed(1)}${a.ranks?' · #'+a.ranks[name][i]:''}</text><rect class="condition-track" x="16" y="${y+13}" width="288" height="7"/><rect class="condition-bar ${i===baseline?'condition-reference':''}" style="--reveal-delay:${i===baseline?0:(i<baseline?i+1:i)*.2}s" x="16" y="${y+13}" width="${(value/max*288).toFixed(3)}" height="7"/><circle class="condition-reference-dot" cx="${x(base)}" cy="${y+16.5}" r="4"/><text class="condition-delta ${diff>0?'delta-positive':''}" x="304" y="${y+42}" text-anchor="end">${i===baseline?'Reference':`Δ ${delta(diff)}`}</text></g>`;
@@ -144,10 +146,11 @@ function renderHomePane(){
  el.innerHTML=`<div class="section-intro"><h2>Ablation studies</h2><p>GLM-5.3 · 128 / 16 budget</p></div><div class="toolbar">${segmented([['feedback','Replay feedback'],['opponents','Opponents'],['batch','Batch size']],ablation,'data-ablation','Ablation experiment')}</div><div class="ablation-scene ${window.matchMedia('(prefers-reduced-motion: reduce)').matches?'ablation-still':'ablation-running'} ${document.hidden?'ablation-suspended':''}"><div class="ablation-scene-heading"><h3>${copy[0]}</h3><span>${a.source.split(' · ')[0]}</span></div>${ablationComparison(ablation)}<p class="ablation-finding">${copy[1]}</p></div><div class="ablation-motion-controls"><a href="assets/aa-arena-ablation-${ablation}.gif" download>GIF ↓</a><a href="assets/aa-arena-ablation-${ablation}.mp4" download>MP4 ↓</a></div><details class="ablation-raw"><summary>Exact values</summary><div class="panel">${table(['Game',...a.labels],a.rows.map(([name,values])=>`<tr><td><a class="game-name" href="#/games/${name.toLowerCase()}/records">${name}</a></td>${values.map(v=>`<td class="${v===Math.max(...values)?'best':''}">${v.toFixed(1)}</td>`).join('')}</tr>`).join(''),'ablation-table',copy[0])}</div></details><p class="note">Δ = Elo change from the reference within each game. Elo is not comparable across games. Separate ablation settings; not main-table cells. ${a.source.split(' · ')[0]}.</p>`;
  $$('[data-ablation]').forEach(b=>b.addEventListener('click',()=>{ablation=b.dataset.ablation;renderHomePane();$(`[data-ablation="${ablation}"]`).focus();}));
  }
+ localize();
 }
 
 function renderContact(){
- $('#main').innerHTML=heading('Contact')+`<article class="contact-page"><h2>Student Association for Science and Technology</h2><p class="contact-affiliation">清华大学计算机系学生科协<br>Department of Computer Science and Technology, Tsinghua University</p><p class="contact-description">The association’s Agent Department organizes the Tsinghua Agent Competition, the source of the games and archived human programs.</p>${external('https://net9.org/home/','Visit SAST')}<div class="contact-people"><h2>Project leads</h2><div class="contact-entry"><h3>Kaisen Yang</h3><a class="inline-link" href="mailto:yks23@mails.tsinghua.edu.cn">yks23@mails.tsinghua.edu.cn</a></div><div class="contact-entry"><h3>Qingle Liu</h3><a class="inline-link" href="mailto:lql24@mails.tsinghua.edu.cn">lql24@mails.tsinghua.edu.cn</a></div></div></article>`;
+ $('#main').innerHTML=heading('Contact')+`<article class="contact-page"><h2>Student Association for Science and Technology</h2><p class="contact-affiliation">Department of Computer Science and Technology<br>Tsinghua University</p><p class="contact-description">The association’s Agent Department organizes the Tsinghua Agent Competition, the source of the games and archived human programs.</p>${external('https://net9.org/home/','Visit SAST')}<div class="contact-people"><h2>Project leads</h2><div class="contact-entry"><h3>Kaisen Yang</h3><a class="inline-link" href="mailto:yks23@mails.tsinghua.edu.cn">yks23@mails.tsinghua.edu.cn</a></div><div class="contact-entry"><h3>Qingle Liu</h3><a class="inline-link" href="mailto:lql24@mails.tsinghua.edu.cn">lql24@mails.tsinghua.edu.cn</a></div></div></article>`;
 }
 function bindMetrics(render){$$('[data-metric]').forEach(b=>b.onclick=()=>{metric=b.dataset.metric;render();$(`[data-metric="${metric}"]`)?.focus();});}
 function bindDownloads(){
@@ -157,7 +160,7 @@ function bindDownloads(){
   list.forEach(g=>g.results.forEach(([elo,rank],i)=>rows.push([g.name,models[i],elo,rank,g.pool,g.ast,g.ra,'main_128_16','Paper Tables 1 and 2',harnesses[i],'median of 3 runs'])));
   const csv=rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n');
   const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=`aa-arena-${b.dataset.download}-results.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
-  $('#toast').textContent=`Exported ${list.length*models.length} results`;$('#toast').classList.add('visible');setTimeout(()=>$('#toast').classList.remove('visible'),2500);
+  $('#toast').textContent=t(`Exported ${list.length*models.length} results`);$('#toast').classList.add('visible');setTimeout(()=>$('#toast').classList.remove('visible'),2500);
  });
 }
 function route(){
@@ -172,8 +175,21 @@ function route(){
   else renderGames();
  }
  if(!(page==='games'&&parts[1]))document.title=page[0].toUpperCase()+page.slice(1)+' · AAArena';
+ document.title=document.title.split(' · ').map(t).join(' · ');
+ localize();
+ $$('[data-language]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.language===i18n.language)));
  window.scrollTo(0,0);
 }
+$$('[data-language]').forEach(button=>button.addEventListener('click',()=>{
+ if(button.dataset.language===i18n.language)return;
+ const scroll=window.scrollY,openDetails=$$('#main details').map(d=>d.open);
+ const animation=$('[data-motion-kind][aria-pressed="true"]')?.dataset.motionKind;
+ const wasPaused=$('[data-motion-toggle]')?.textContent===t('Play');
+ i18n.set(button.dataset.language);route();
+ $$('#main details').forEach((d,i)=>{d.open=Boolean(openDetails[i]);});
+ if(animation){$(`[data-motion-kind="${animation}"]`)?.click();if(($('[data-motion-toggle]')?.textContent===t('Play'))!==wasPaused)$('[data-motion-toggle]')?.click();}
+ window.scrollTo(0,scroll);button.focus({preventScroll:true});
+}));
 document.addEventListener('visibilitychange',()=>$('.ablation-scene')?.classList.toggle('ablation-suspended',document.hidden));
 window.addEventListener('hashchange',()=>{route();$('#main').focus({preventScroll:true});});route();
 })();

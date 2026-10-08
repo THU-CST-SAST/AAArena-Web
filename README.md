@@ -22,6 +22,13 @@ service, AgentBench, AHL-Arena, an API, or a database.
 
 ## Local preview
 
+The header offers English / Chinese switching. First visits default to English;
+an explicit selection is saved locally when browser storage is available.
+`i18n.js` translates interface copy, while `game-rules.zh.js` contains the Chinese
+game guides. Routes, filters and experimental values do not change with language.
+The manuscript, CSV data fields and existing downloadable animations remain in
+their original language; live canvas labels switch with the interface.
+
 From the repository root:
 
 ```sh

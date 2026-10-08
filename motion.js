@@ -11,7 +11,7 @@
     c.fillStyle=INK; c.fillRect(0,0,1200,675);
     const t=((seconds%DURATION)+DURATION)%DURATION;
     const text=(s,x,y,size=24,color=WHITE,weight=400,align='left')=>{
-      c.fillStyle=color;c.font=`${weight} ${size}px Arial, sans-serif`;c.textAlign=align;c.fillText(s,x,y);
+      c.fillStyle=color;c.font=`${weight} ${size}px Arial, sans-serif`;c.textAlign=align;c.fillText(window.ArenaI18n?window.ArenaI18n.t(s):s,x,y);
     };
     const line=(x1,y1,x2,y2,color='#363636',width=2)=>{c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();};
     const box=(x,y,w,h,color)=>{c.fillStyle=color;c.fillRect(x,y,w,h);};
@@ -95,7 +95,7 @@
     let kind='loop',playing=!reduced.matches,id=0,start=performance.now(),elapsed=0,visible=true;
     const toggle=root.querySelector('[data-motion-toggle]');
     const paint=()=>draw(canvas,kind,elapsed);
-    const sync=()=>{toggle.textContent=playing?'Pause':'Play';toggle.setAttribute('aria-label',playing?'Pause animation':'Play animation');root.querySelectorAll('[data-motion-kind]').forEach(b=>{b.classList.toggle('active',b.dataset.motionKind===kind);b.setAttribute('aria-pressed',String(b.dataset.motionKind===kind));});root.querySelectorAll('[data-motion-download]').forEach(a=>{a.href=`assets/aa-arena-${kind}.${a.dataset.motionDownload}`;});canvas.setAttribute('aria-label',kind==='loop'?'Schematic policy, match and replay iteration. Not actual gameplay.':'Dorado GLM-5.3, measured champion progress from pool rank 41 to 2.');};
+    const sync=()=>{toggle.textContent=playing?'Pause':'Play';toggle.setAttribute('aria-label',playing?'Pause animation':'Play animation');root.querySelectorAll('[data-motion-kind]').forEach(b=>{b.classList.toggle('active',b.dataset.motionKind===kind);b.setAttribute('aria-pressed',String(b.dataset.motionKind===kind));});root.querySelectorAll('[data-motion-download]').forEach(a=>{a.href=`assets/aa-arena-${kind}.${a.dataset.motionDownload}`;});canvas.setAttribute('aria-label',kind==='loop'?'Schematic policy, match and replay iteration. Not actual gameplay.':'Dorado GLM-5.3, measured champion progress from pool rank 41 to 2.');window.ArenaI18n?.apply(root);};
     const frame=now=>{if(playing&&visible&&!document.hidden){elapsed=(now-start)/1000;paint();}id=requestAnimationFrame(frame);};
     toggle.onclick=()=>{playing=!playing;start=performance.now()-elapsed*1000;sync();};
     root.querySelectorAll('[data-motion-kind]').forEach(b=>b.onclick=()=>{kind=b.dataset.motionKind;elapsed=reduced.matches&&kind==='dorado'?10:0;start=performance.now()-elapsed*1000;paint();sync();});
