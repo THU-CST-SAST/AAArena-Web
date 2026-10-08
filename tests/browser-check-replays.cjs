@@ -15,7 +15,8 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
   await p.getByRole('button',{name:'Pause previews',exact:true}).click();
   const paused=await pixels();await p.waitForTimeout(350);assert.equal(await pixels(),paused);
   await p.screenshot({path:'/tmp/aa-replay-desktop.png'});
-  for(const game of ['snakego','pacman','monecraft','dorado']){
+  assert.equal(await p.locator('[data-replay="monecraft"]').count(),0);
+  for(const game of ['snakego','pacman','antwar','dorado']){
    await p.locator(`[data-replay="${game}"]`).click();
    await p.getByRole('dialog').waitFor();
    for(const seat of [0,1]){
@@ -34,6 +35,7 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
     assert.equal(await dl.failure(),null);
     const [proofDl]=await Promise.all([p.waitForEvent('download'),p.getByRole('link',{name:'Match provenance ↓'}).click()]);
     const proof=JSON.parse(await fs.readFile(await proofDl.path(),'utf8'));
+    assert.equal(proof.human.rank,1,'must be the actual frozen-pool leader');
     const bytes=await fs.readFile(await dl.path());
     assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),proof.matches[seat].raw_sha256);
     assert.equal(proof.matches[seat].terminal_verified,true);
@@ -65,6 +67,10 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
   await quiet.getByRole('button',{name:'Play previews',exact:true}).waitFor();
   const quietPixels=()=>quiet.locator('.replay-card canvas').first().evaluate(c=>c.toDataURL());
   const still=await quietPixels();await quiet.waitForTimeout(350);assert.equal(await quietPixels(),still);
+  await quiet.setViewportSize({width:1440,height:1000});
+  assert.equal(await quietPixels(),still,'resizing a paused gallery must not erase its canvases');
+  await quiet.setViewportSize({width:390,height:844});
+  assert.equal(await quietPixels(),still);
   await quiet.getByRole('button',{name:'Watch SnakeGo replay'}).click();await quiet.getByRole('button',{name:'Play',exact:true}).click();
   await quiet.getByRole('button',{name:'Pause',exact:true}).waitFor();await quiet.close();
   assert.deepEqual(errors,[]);console.log('PASS: real replay overview, 8 matches, seeking, seat switch, verified downloads, English/Chinese, focus, mobile, reduced motion');

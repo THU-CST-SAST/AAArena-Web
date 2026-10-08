@@ -1,0 +1,122 @@
+{
+  "game": "antwar",
+  "model": "glm-5.3",
+  "source_commit": "fcb87bea85c82260969d558e7b340bce95a68db8",
+  "human": {
+    "id": "rank01__omegafantasy__Magica__v13",
+    "rank": 1,
+    "elo": 1947.124223
+  },
+  "ai": {
+    "elo": 1464.234,
+    "rank": 5,
+    "snapshot": "0d70a21924fc25c5cd18e61d07697454cfcdc85c03e016be72e9bcaedf2b07bb",
+    "strategy_hash": "cf7017182cc613e3b59bddfcde805c359d6bf9e961b0b747a60152d6ef2f97f1"
+  },
+  "seed": 20240117,
+  "matches": [
+    {
+      "status": "complete",
+      "winner": "P1",
+      "scores": {
+        "P0": 43,
+        "P1": 50
+      },
+      "rounds": 512,
+      "diagnostic": null,
+      "payload": {
+        "official_criterion": "base_hp_then_tiebreakers",
+        "ants_killed": {
+          "P0": 111,
+          "P1": 113
+        },
+        "weapons_used": {
+          "P0": 0,
+          "P1": 2
+        },
+        "criterion_chain": [
+          "base_hp(desc)",
+          "ants_killed(desc)",
+          "weapons_used(asc)",
+          "ai_time(asc, \u56de\u653e\u4e0d\u542b)",
+          "first_player(\u56de\u653e\u4e0d\u542b)"
+        ],
+        "rounds_unit": "game_round",
+        "backend_half_rounds": 1025
+      },
+      "ai_seat": 0,
+      "raw_sha256": "99d2c13d839c9c223fbae14635861d28730b8ec58e1de1c0982376e6a9a7fc16",
+      "raw_file": "antwar-ai-p0.json",
+      "display_final_scores": [
+        43,
+        50
+      ],
+      "state_count": 512,
+      "terminal_verified": true
+    },
+    {
+      "status": "complete",
+      "winner": "P0",
+      "scores": {
+        "P0": 50,
+        "P1": 49
+      },
+      "rounds": 512,
+      "diagnostic": null,
+      "payload": {
+        "official_criterion": "base_hp_then_tiebreakers",
+        "ants_killed": {
+          "P0": 122,
+          "P1": 116
+        },
+        "weapons_used": {
+          "P0": 1,
+          "P1": 0
+        },
+        "criterion_chain": [
+          "base_hp(desc)",
+          "ants_killed(desc)",
+          "weapons_used(asc)",
+          "ai_time(asc, \u56de\u653e\u4e0d\u542b)",
+          "first_player(\u56de\u653e\u4e0d\u542b)"
+        ],
+        "rounds_unit": "game_round",
+        "backend_half_rounds": 1025
+      },
+      "ai_seat": 1,
+      "raw_sha256": "c5cdfe3736997cef8d59a2cfe75818e1b70e2956ecdf0aa90bf15f5ae73421f0",
+      "raw_file": "antwar-ai-p1.json",
+      "display_final_scores": [
+        50,
+        49
+      ],
+      "state_count": 512,
+      "terminal_verified": true
+    }
+  ],
+  "game_asset_sha256": "aadd3e37a52f1a71c185a1d11985e3d06adb36d53c582c40d7f8d44666ff2659",
+  "game_asset_source": "AAArena 0.4.0 verified game archive; runtime source_commit recorded separately",
+  "human_source": "Unmodified rank-1 package from AHL-Arena/games/antwar/players/pool",
+  "human_files_sha256": {
+    ".gitignore": "84b8ad34fa50140d7ac74117cc95ee75f2dcc216ae6614a1c1114691b2d2a462",
+    "Doxyfile": "4fed53b0d55f140f9461f31c040a3469f3773f186ac4f1a95e31d80789fd2b64",
+    "Makefile": "b1dd8944756b76d40709f55473b9527557a97e7da0b96cd3441471568a216838",
+    "README.md": "91dd19db1916ec9721279079f82988dc0d4fbdd19badaeec7ae91bf0beeaa906",
+    "ant_tokens.txt": "5a65c456c3102e3b8fb1accdd700eeb9140fc3892e59d32c09ea1d74c08583fb",
+    "include/common.hpp": "47702b3884b2fa0a0da08d11505b1a9bd37448946cdbe6d1682f1544f435586d",
+    "include/control.hpp": "48d0fb019c6b8ea83be2043786a18b6f634cf0b36e00a5e3cce6197e513c09d0",
+    "include/game_info.hpp": "00a0e41909bafa3c0689aa6c517328011a7948921bfae5dadd536d349a791a55",
+    "include/io.hpp": "9951e93f8cda029e6be75d5c496cccd1423b01c26a672e2dd998ec92eb0f83e2",
+    "include/optional-impl.hpp": "4c6e6c4d3fb1e1b6545f206e49cbd891d91a0671ac95466cebb13383f0c2c2a2",
+    "include/optional.hpp": "e7f6c54b6bb972021446f35a2b25644e840b655680ff22a43920404bc690626c",
+    "include/simulate.hpp": "3e4cc187792ec93a8ec1255948062207f6fdeec3e9fa893a42e42af182584f40",
+    "include/template.hpp": "93aa1118fa4c4e8037cb906634ef1f7c994c6604f3ab7b8af96ed3bc6c2df541",
+    "main.cpp": "509592f33310ab59838a1222eca586bea37aac09f62f7e0073aef9f7e323deaf",
+    "out.txt": "864902f1cd6182af7330c3585e1384b51a0d2ffc4b894ce487b7f497231e8109"
+  },
+  "purpose": "New exhibition matches, not original paper evaluation matches",
+  "selection": "Highest main-table AI Elo versus rank 1 of the frozen human pool; both seats, backend seed 20240117",
+  "requested_seed": 42,
+  "visualization": "Recorded ants and tower deltas; attack lines only for recorded targets. Simplified full-information hex map.",
+  "map_source_sha256": "5b77ee7ee0720b66b8a59d0492466a18292c436ae8dfd0e4b673be3b58b3da8d"
+}

@@ -11,6 +11,13 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
    for(const width of [1440,1024,768,390,320]){
     await page.setViewportSize({width,height:1000});
     await page.locator('[data-page="home"]').click();await page.locator('[data-home="abstract"]').click();
+    const gallery=await page.locator('.replay-card canvas').evaluateAll(nodes=>nodes.map(e=>{const b=e.getBoundingClientRect();return {width:b.width,height:b.height,x:b.x,y:b.y};}));
+    assert.equal(gallery.length,4);
+    assert.ok(gallery.every(b=>Math.abs(b.width-b.height)<1),'square previews without letterboxing');
+    assert.ok(Math.abs(gallery[1].x-gallery[0].x-gallery[0].width)<=11,'tight gallery gutters');
+    if(width>1100)assert.ok(gallery.every(b=>Math.abs(b.y-gallery[0].y)<1),'one balanced desktop row');
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`replay overflow ${lang} ${width}`);
+    assert.ok(await page.locator('.replay-card-score').evaluateAll(nodes=>nodes.every(e=>e.scrollWidth<=e.clientWidth+1)),`replay scores must not be clipped ${lang} ${width}`);
     const rankChecks=await page.locator('.rank-tile').evaluateAll(tiles=>tiles.map(tile=>{
      const box=tile.getBoundingClientRect(), rank=tile.querySelector('strong').getBoundingClientRect();
      const children=[...tile.children].map(e=>e.getBoundingClientRect());

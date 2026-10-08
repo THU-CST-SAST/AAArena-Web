@@ -4,7 +4,7 @@
   "private": true,
   "description": "Static AAArena research website",
   "scripts": {
-    "test": "node tests/paper-data.cjs && node tests/browser-check.cjs && node tests/browser-check-abstract.cjs && node tests/browser-check-replays.cjs && node tests/browser-check-paper.cjs && node tests/browser-check-rules.cjs && node tests/browser-check-i18n.cjs && node tests/browser-check-layout.cjs",
+    "test": "node tests/paper-data.cjs && node tests/antwar-replay.cjs && node tests/browser-check.cjs && node tests/browser-check-abstract.cjs && node tests/browser-check-replays.cjs && node tests/browser-check-paper.cjs && node tests/browser-check-rules.cjs && node tests/browser-check-i18n.cjs && node tests/browser-check-layout.cjs",
     "export:motion": "node tools/export-motion.cjs",
     "export:ablations": "node tools/export-ablations.cjs"
   },

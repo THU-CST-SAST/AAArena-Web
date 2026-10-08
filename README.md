@@ -151,7 +151,8 @@ differences from fixed references. The same charts are exported as GIF/MP4.
 
 ## Real-match showcase
 
-Four games currently have replays: SnakeGo, Pacman, MoneCraft and Dorado. Click any
+The homepage shows SnakeGo, Pacman, AntWar and Dorado in a tight square-board gallery.
+Desktop uses one four-game row; tablet and mobile use two columns. Click any
 preview to open a full match, seek, change playback speed, switch seats, or download
 the original replay and its provenance. English/Chinese, keyboard controls, small
 screens and reduced-motion preferences are supported. Offscreen/background
@@ -160,7 +161,8 @@ previews pause; frames are not redrawn until the recorded state changes.
 These are **new exhibition matches**, not the original paper evaluation matches.
 For each game, the highest-Elo AI policy in the main table faces the rank-1 program
 in the frozen human pool. “Human champion” refers to that pool rank, not a claimed
-historical competition title. A seed of 42 and both seat assignments were used;
+historical competition title. Both seat assignments were used. The request seed is
+42; AntWar's evaluator fixes the actual backend seed to 20240117 (shown in its viewer);
 all eight games completed normally. Both AI wins and human wins are included.
 Results do not change the manuscript's Elo tables and do not estimate win rates.
 
@@ -168,14 +170,19 @@ Results do not change the manuscript's Elo tables and do not estimate win rates.
 | --- | --- | --- | --- | --- |
 | SnakeGo | Opus5.5 | 238–25 | 59–150 | Territory points |
 | Pacman | Opus5.5 | 1556–519 | 454–1539 | Points |
-| MoneCraft | GPT6-sol | 20880–32410 | 24040–22810 | Gold |
+| AntWar | GLM-5.3 | 43–50 | 50–49 | Remaining base HP |
 | Dorado | GPT6-sol | 0–3000 | 3000–0 | Remaining base HP |
 
 AI exports: `agentlab:/home/qingle/agentbench/exports/main-table-champions-84-20261006/`.
 Match runner and records: `agentlab:/home/qingle/agentbench/AA-Arena-Web-Replays/`,
 under `runs/web-showcase-20261008/`. Strategies were not edited; hashes were checked
 before and after play. Runtime/game packs came from `SAST-agent/AA-Arena` at
-`fcb87bea85c82260969d558e7b340bce95a68db8`. No server connection is needed for viewing.
+`fcb87bea85c82260969d558e7b340bce95a68db8`. AntWar uses the verified AAArena 0.4.0
+game archive with the unmodified rank-1 package restored from AHL-Arena; its separate
+asset digest and all human-package file hashes are in `antwar-provenance.json`.
+The preliminary pool-rank-10 check is excluded from the website. No server connection
+is needed for viewing. MoneCraft's original downloads remain archived, but it is no
+longer featured in the homepage gallery.
 
 `tools/import-replays.py` accepts a sanitized export bundle (match records plus
 gzip/base64 raw replays and their SHA-256 values) and an installed runtime checkout:
@@ -196,4 +203,10 @@ Rendering is a simplified, full-information 2D view of recorded states, not the
 original competition client or a video, and not either player's limited observation.
 No moves or match outcomes are generated in the browser. Unit art is schematic;
 the current viewer does not reproduce every original particle/effect animation.
-The compressed state payload is about 225 KB over gzip (both seats, all four games).
+AntWar is imported separately with `python3 tools/import-antwar.py /path/to/bundle.json`.
+The importer verifies raw hashes, both referee outcomes, the actual backend seed,
+and the source map. It accumulates tower deltas, removes demolished towers, and
+only draws attack lines for recorded targets. No extra moves or combat events are
+invented for visual effect. The renderer omits pheromones and superweapon effects;
+the original downloadable JSON retains them. Importing does not change any policy
+or manuscript result.
