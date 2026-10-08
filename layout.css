@@ -1,4 +1,72 @@
 /* Shared visual rhythm. Keep component sizes here instead of one-off page tweaks. */
+/* Records lead with outcomes; exact tables remain available on demand. */
+.record-budget { white-space: nowrap; color: var(--muted); font-size: 14px; }
+.record-outcome { display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px; padding: 26px; border-bottom: 1px solid var(--line); }
+.record-outcome>div+div { border-left: 1px solid var(--line); padding-left: 26px; }
+.record-outcome span { display: block; color: var(--muted); font-size: 14px; }
+.record-outcome strong { display: block; color: var(--accent); font-size: 40px; line-height: 1.25; font-weight: 600; margin-top: 8px; font-variant-numeric: tabular-nums; }
+.record-outcome p { margin-top: 6px; font-size: 14px; }
+.record-chart-key { display: flex; justify-content: space-between; gap: 16px; padding: 20px 26px 0; color: var(--muted); font-size: 12px; }
+.record-plot { padding: 18px 26px; --label-width: 148px; --value-width: 116px; }
+.record-axis { display: flex; justify-content: space-between; gap: 6px; margin: 0 calc(var(--value-width) + 16px) 12px calc(var(--label-width) + 16px); font-size: 11px; color: var(--muted); }
+.record-plot ul { padding: 0; margin: 0; list-style: none; }
+.record-plot-row { display: grid; grid-template-columns: var(--label-width) minmax(0,1fr) var(--value-width); align-items: center; gap: 16px; min-height: 60px; border-bottom: 1px solid var(--line); }
+.record-plot-row:last-child { border-bottom: 0; }
+.record-label { font-size: 14px; line-height: 1.4; overflow-wrap: anywhere; }
+.record-label small { display: block; color: var(--accent); font-size: 11px; margin-top: 3px; }
+.record-track { position: relative; height: 3px; background: var(--line); }
+.record-dot { position: absolute; width: 9px; height: 9px; border-radius: 50%; background: #838a95; top: 50%; transform: translate(-50%,-50%); }
+.record-best .record-dot { background: var(--accent); width: 12px; height: 12px; box-shadow: 0 0 0 4px var(--soft); }
+.record-best .record-label>span, .record-best .record-value>strong { color: var(--accent); font-weight: 650; }
+.record-value { display: flex; justify-content: flex-end; align-items: center; gap: 12px; font-variant-numeric: tabular-nums; }
+.record-value>strong { font-size: 15px; font-weight: 500; }
+.record-rank { font-size: 14px; min-width: 33px; text-align: right; }
+.record-gold { color: var(--accent); border: 1px solid var(--accent); padding: 1px 5px; text-align: center; }
+.record-cost-bar { display: block; height: 5px; background: #838a95; position: relative; top: -1px; }
+.record-caption { font-size: 13px; line-height: 1.7; color: var(--muted); padding: 0 26px 20px; }
+.record-details { border-top: 1px solid var(--line); }
+.record-details>summary { cursor: pointer; padding: 16px 26px; font-size: 14px; }
+.record-details>summary:hover { color: var(--accent); }
+.record-table-best { background: var(--soft); color: var(--accent); font-weight: 600; }
+.record-change { display: grid; grid-template-columns: 1fr 32px 1fr 1.4fr; align-items: center; gap: 20px; padding: 26px; }
+.record-change div>span, .record-change small, .record-change p>span { display: block; color: var(--muted); font-size: 13px; }
+.record-change div>strong { display: block; font-size: 36px; line-height: 1.3; font-weight: 600; margin: 6px 0; }
+.record-change-arrow { color: var(--muted); font-size: 24px; }
+.record-change-end>strong, .record-gain>strong { color: var(--accent); }
+.record-change p { border-left: 1px solid var(--line); padding-left: 20px; }
+.record-change p>strong { display: block; font-size: 22px; margin-bottom: 6px; color: var(--ink); }
+.record-change .record-gain>strong { color: var(--accent); }
+.record-trajectory { padding: 24px 26px; }
+.record-trajectory-endpoints { display: flex; align-items: center; gap: 22px; font-size: 30px; font-variant-numeric: tabular-nums; }
+.record-trajectory-endpoints>strong { color: var(--accent); }
+.record-trajectory-endpoints small { display: block; font-size: 13px; color: var(--muted); font-weight: 400; }
+.record-trajectory svg { display: block; width: 100%; margin-top: 22px; }
+.record-trajectory text { fill: var(--muted); font-size: 11px; }
+.record-gridline { stroke: var(--line); }
+.record-path { fill: none; stroke: var(--accent); stroke-width: 2; }
+.record-point { fill: var(--accent); }
+.record-trajectory p { font-size: 13px; margin-top: 10px; }
+@media(max-width:900px) {
+ .record-plot { --label-width: 110px; --value-width: 98px; padding: 16px; }
+ .record-plot-row { gap: 10px; }
+ .record-axis { margin-left: calc(var(--label-width) + 10px); margin-right: calc(var(--value-width) + 10px); }
+}
+@media(max-width:600px) {
+ .record-outcome { padding: 20px 16px; gap: 16px; grid-template-columns: 1fr 1.2fr; }
+ .record-outcome>div+div { padding-left: 16px; }
+ .record-outcome strong { font-size: 30px; }
+ .record-outcome span, .record-outcome p { font-size: 12px; }
+ .record-chart-key, .record-caption { padding-left: 16px; padding-right: 16px; }
+ .record-axis { margin-left: 0; margin-right: 0; }
+ .record-plot-row { grid-template-columns: minmax(0,1fr) auto; gap: 10px; padding: 13px 0 17px; }
+ .record-track { grid-column: 1 / -1; grid-row: 2; }
+ .record-label { font-size: 13px; }
+ .record-value>strong { font-size: 14px; }
+ .record-details>summary { padding: 16px; }
+ .record-change { grid-template-columns: 1fr 24px 1fr; gap: 16px; padding: 20px 16px; }
+ .record-change p { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--line); padding: 16px 0 0; }
+ .record-trajectory { padding: 20px 16px; }
+}
 :root {
   --type-caption: 12px;
   --type-small: 14px;

@@ -14,6 +14,10 @@ service, AgentBench, AHL-Arena, an API, or a database.
 - Leaderboard: twelve games × seven models, with human-pool rank and Elo; individual
   game tables and CSV export.
 - Games: twelve games, each with a leaderboard, detailed gameplay guide, and measured records.
+  Records highlight best rank and highest Elo, compare models with labeled Elo
+  dot plots, and keep exact tables expandable. Continuation gains, selected
+  trajectory milestones, ablations, replay learning and token expenditure remain
+  separate experiments; token bars use a zero baseline and do not imply quality.
   `game-rules.js` contains the guides: setup, round flow, actions, economy, scoring
   and end conditions, summarized from competition documents and Arena backend
   implementations. Each guide lists its source files. They are explanatory

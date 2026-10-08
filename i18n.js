@@ -4,6 +4,18 @@
  let language='en';
  try { if(localStorage.getItem('aaarena-language')==='zh')language='zh'; } catch {}
  const words = new Map(Object.entries({
+  'Median of 3 runs · Retained best · Table 2':'各次实验保留最佳策略，取 3 次结果的中位数 · 表 2',
+  'Best pool rank':'最好池内排名','Highest Elo':'最高 Elo',
+  'Model comparison · Elo':'模型表现对比 · Elo',
+  'Blue marks the highest Elo; #1 badges mark every model that tops the human pool.':'蓝色突出最高 Elo；所有登顶模型的 #1 排名均单独标出。',
+  'Opus5.5 uses Claude Code; other models use Codex. These are results against a frozen pool, not direct head-to-head win rates.':'Opus5.5 使用 Claude Code，其余模型使用 Codex。这里比较的是固定选手池中的成绩，不是模型之间的直接对战胜率。',
+  'No improvement':'最佳成绩未提升','Change in retained best':'最佳成绩的变化',
+  'Feedback budget: 128 / 16 → 384 / 48':'反馈预算增至三倍：128 / 16 → 384 / 48',
+  'Selected retained-best milestones, not the full evaluation trajectory':'保留策略的部分改进节点，不是每次评测的完整走势',
+  'Full-pool evaluation · selected milestones only':'横轴为整池评测次数，仅展示部分改进节点',
+  'Separate replay-source comparison · Figure 13':'单独比较回放来源的实验 · 图 13',
+  'Both reach #1. Terminal Elo alone does not establish better learning.':'两种方式都已登顶，不能仅凭最终 Elo 判断哪种学习方式更好。',
+  'M tokens':'百万 token','Token use is expenditure, not a performance score.':'token 用量表示投入，不代表策略强弱。',
   'Home':'首页','Leaderboard':'榜单','Games':'游戏','Contact':'联系我们','Paper':'论文',
   'Abstract':'摘要','Main results':'主要结果','Ablations':'消融实验','Overview':'游戏说明','Records':'实验记录',
   'Skip to content':'跳至正文','Main navigation':'主导航','AAArena home':'AAArena 首页','Tsinghua University':'清华大学',
