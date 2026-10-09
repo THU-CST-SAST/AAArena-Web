@@ -73,7 +73,7 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
  assert.ok(await page.locator('.contact-entry').evaluateAll(entries=>entries.every(el=>el.querySelector('a').getBoundingClientRect().top>=el.querySelector('h3').getBoundingClientRect().bottom)),'email should sit below its name, not at the far edge');
  assert.equal(await page.locator('a[href^="mailto:"]').count(),2);
  await page.getByRole('heading',{name:'Kaisen Yang'}).waitFor();
- assert.ok(await page.getByRole('button',{name:'arXiv',exact:true}).isDisabled());assert.equal(await page.locator('a[href*="aa-arena.pdf"]').count(),0);
+ assert.equal(await page.getByRole('link',{name:'arXiv ↗',exact:true}).getAttribute('href'),'https://arxiv.org/abs/2610.12341');assert.equal(await page.locator('a[href*="aa-arena.pdf"]').count(),0);
  for(const width of [390,320]){
   await page.setViewportSize({width,height:844});
   for(const name of ['Home','Leaderboard','Games','Contact']){await go(name);await noOverflow();await shot(`mobile-${width}-${name.toLowerCase()}`);}
@@ -86,6 +86,6 @@ const target=process.env.ARENA_TEST_URL||defaultTarget;
  await go('Games');await page.getByRole('link',{name:'Pacman details',exact:true}).focus();await page.keyboard.press('Enter');await page.getByRole('heading',{name:'Pacman',exact:true}).waitFor();
  await page.goto(target+'#/games/missing');await page.getByRole('heading',{name:'Game not found'}).waitFor();await page.getByRole('link',{name:'Browse all games'}).click();await page.getByRole('heading',{name:'Games',exact:true}).waitFor();assert.equal(await page.locator('.game-card').count(),12);
  assert.deepEqual(errors,[]);
- console.log(JSON.stringify({result:'PASS',target,viewports:['1440x1000','390x844','320x844'],tabs:4,games:12,detailViews:36,csvResults:84,checks:['home research panels','model and game rankings','tie handling','CSV export','search and sorting, no categories','deep links and refresh','browser back','keyboard navigation','disabled arXiv control','no horizontal page overflow'],errors},null,2));
+ console.log(JSON.stringify({result:'PASS',target,viewports:['1440x1000','390x844','320x844'],tabs:4,games:12,detailViews:36,csvResults:84,checks:['home research panels','model and game rankings','tie handling','CSV export','search and sorting, no categories','deep links and refresh','browser back','keyboard navigation','published arXiv link','no horizontal page overflow'],errors},null,2));
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exit(1)});

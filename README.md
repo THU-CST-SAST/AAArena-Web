@@ -158,10 +158,11 @@ Data are transcribed from the supplied manuscript, not a live tournament feed:
 
 Current manuscript: `Can_AI_Agent_Build_Game_Agent.pdf` (supplied 2026-10-07),
 retained unchanged at `assets/aa-arena.pdf` as a data-verification snapshot (the file
-is still publicly accessible, but no longer linked from the UI). All paper controls
-are disabled until `window.ARENA.paper.arxivUrl` in `data.js` is set to the published
-arXiv abstract URL. Setting that one field enables the header, hero and contextual
-paper references together; no old PDF page anchors are carried over.
+is still publicly accessible, but no longer linked from the UI). The header, hero
+and contextual paper references now link to [arXiv:2610.12341](https://arxiv.org/abs/2610.12341),
+configured in `window.ARENA.paper.arxivUrl` in `data.js`. No old PDF page anchors
+are carried over. The static header and no-JavaScript fallback use the same URL.
+This link update does not replace the manuscript snapshot or experimental data.
 Its title is “Can AI Agents Build Game
 Agents for Real-World Adversarial Games?” The new version names Hongning Wang as
 the corresponding author. His contact email and profile are verified against

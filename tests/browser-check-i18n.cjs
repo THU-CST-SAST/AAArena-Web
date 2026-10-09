@@ -34,7 +34,7 @@ const assert=require('node:assert/strict');
   await page.locator('[data-ablation="feedback"]').click();
   await page.getByRole('heading',{name:'补充实验：回放来源',exact:true}).waitFor();
   assert.match(await page.locator('.replay-learning-note').innerText(),/在 Miracle 中效果更好，在 AntWar 中则不如自己对战/);
-  assert.ok(await page.locator('.replay-learning-note .paper-pending').isDisabled());
+  assert.equal(await page.locator('.replay-learning-note a').getAttribute('href'),'https://arxiv.org/abs/2610.12341');
   await page.locator('.replay-learning-note').screenshot({path:'/tmp/aa-paper-note-zh.png'});
   await language('en').click();
   assert.match(await page.locator('.replay-learning-note').innerText(),/while still receiving full-pool evaluation feedback/);
